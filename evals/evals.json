@@ -1,0 +1,23 @@
+{
+  "skill_name": "paper-trail",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've been working on a habit app idea across ChatGPT, Claude, Claude Code and Gemini. Here are my exports. Combine them and make me a shareable doc of where the idea stands and how we got here.",
+      "expected_output": "Normalizes the 4 relevant sources (filters out the pasta chat), writes a ledger citing anchors, asks the undated Gemini chat's date or flags it, compiles a team dossier where offline sync shows as rejected with its reason and the read-only cache as its partial revival, Firebase as superseded by Supabase, and pricing as an open question.",
+      "files": ["../tests/fixtures/chatgpt-export.zip", "../tests/fixtures/claude-conversations.json", "../tests/fixtures/session-7f3a.jsonl", "../tests/fixtures/gemini-pricing.md", "../tests/fixtures/notes.txt"]
+    },
+    {
+      "id": 2,
+      "prompt": "Turn this into a version for investors.",
+      "expected_output": "Same facts, investor ordering: evidence, plan, costs and risks first; decisions and tech folded; skills left out; assumption-level headline numbers disclosed in the summary text.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Let's brainstorm a CLI that sorts my Downloads folder. Track what we decide as we go.",
+      "expected_output": "Initializes .dossier/ledger.jsonl (or chat checkpoints), logs decisions with reasons during the conversation with one-line notices, and when compiled produces no cost, team or plan sections because none were discussed.",
+      "files": []
+    }
+  ]
+}

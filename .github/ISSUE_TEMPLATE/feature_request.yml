@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation, not just the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to happen?
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Fits the project's ground rules
+      options:
+        - label: Works without third-party dependencies or network access (or I've explained why it can't)
+        - label: Keeps the honesty rules (confidence tags, evidence-gated sections)

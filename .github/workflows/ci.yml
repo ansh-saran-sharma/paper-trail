@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.9", "3.10", "3.11", "3.12"]
+        include:
+          - os: macos-latest
+            python: "3.12"
+          - os: windows-latest
+            python: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate skill
+        run: python tools/package_skill.py --check
+
+  browser:
+    name: Browser render test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Tests including the browser render
+        run: python -m unittest discover -s tests -v
+      - name: Examples build cleanly
+        run: python tools/build_examples.py

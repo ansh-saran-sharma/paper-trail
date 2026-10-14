@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Idea dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --paper: #F5F6F8; --surface: #FFFFFF; --ink: #172033; --muted: #5B6476; --faint: #8A93A5;
+  --rule: #DCE1EA; --band: #EDF0F5; --accent: #2448B5;
+  --s-accepted: #0E7C66; --s-rejected: #C2362B; --s-superseded: #6B4FD8; --s-parked: #B7791F; --s-proposed: #7A8499;
+  --good: #0E7C66; --bad: #C2362B;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --radius-s: 4px; --radius-m: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121722; --surface: #1A2030; --ink: #E6EAF2; --muted: #A4ADBF; --faint: #7D879B;
+    --rule: #2C3447; --band: #1F2638; --accent: #8FA8FF;
+    --s-accepted: #3CC3A3; --s-rejected: #F0675C; --s-superseded: #A893FF; --s-parked: #E5B04B; --s-proposed: #8F99AE;
+    --good: #3CC3A3; --bad: #F0675C;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121722; --surface: #1A2030; --ink: #E6EAF2; --muted: #A4ADBF; --faint: #7D879B;
+  --rule: #2C3447; --band: #1F2638; --accent: #8FA8FF;
+  --s-accepted: #3CC3A3; --s-rejected: #F0675C; --s-superseded: #A893FF; --s-parked: #E5B04B; --s-proposed: #8F99AE;
+  --good: #3CC3A3; --bad: #F0675C;
+}
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
+*, *::before, *::after { box-sizing: inherit; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--body); font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+img, svg { max-width: 100%; }
+
+.layout { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; max-width: 1240px; margin: 0 auto; padding: 40px 28px 80px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14px; }
+nav.toc .toc-title { font-family: var(--display); font-weight: 700; font-size: 17px; margin: 0 0 14px; line-height: 1.25; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+nav.toc a { display: block; padding: 5px 0 5px 14px; color: var(--muted); text-decoration: none; margin-left: -1px; border-left: 2px solid transparent; }
+nav.toc a:hover { color: var(--ink); }
+nav.toc a.active { color: var(--ink); border-left-color: var(--ink); }
+.theme-btn { margin-top: 20px; background: none; border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 4px 10px; font-size: 13px; color: var(--muted); cursor: pointer; }
+main { min-width: 0; }
+
+section.sec { padding: 44px 0 8px; border-top: 1px solid var(--rule); }
+section.sec:first-child { border-top: 0; padding-top: 0; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 28px; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.01em; }
+.sec-lede { color: var(--muted); margin: 0 0 24px; max-width: 70ch; }
+h3 { font-family: var(--display); font-weight: 500; font-size: 19px; margin: 0 0 8px; }
+p { max-width: 72ch; }
+details.fold > summary { cursor: pointer; list-style: none; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary h2::after { content: " +"; color: var(--faint); font-weight: 500; }
+details.fold[open] > summary h2::after { content: " −"; }
+
+/* Hero */
+.hero h1 { font-family: var(--display); font-weight: 700; font-size: clamp(44px, 7vw, 84px); line-height: 0.95; letter-spacing: -0.03em; margin: 0 0 18px; }
+.hero .one-liner { font-size: clamp(19px, 2.2vw, 24px); line-height: 1.35; margin: 0 0 28px; max-width: 34ch; }
+.stage-track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; max-width: 620px; margin: 0 0 10px; }
+.stage-track .st { height: 6px; border-radius: 3px; background: var(--rule); }
+.stage-track .st.done { background: var(--ink); }
+.stage-labels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; max-width: 620px; font-size: 13px; color: var(--faint); }
+.stage-labels .cur { color: var(--ink); font-weight: 600; }
+.status-line { margin: 14px 0 32px; color: var(--muted); }
+.highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius-m); overflow: hidden; margin-bottom: 36px; }
+.hl { background: var(--surface); padding: 16px 18px 14px; }
+.hl .lab { font-size: 13px; color: var(--muted); }
+.hl .val { font-family: var(--display); font-size: 32px; font-weight: 700; line-height: 1.1; margin: 4px 0 6px; }
+.hl .val small { font-family: var(--body); font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 4px; }
+.hl .range { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.frame-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px 36px; }
+.frame-grid h3 { font-size: 16px; color: var(--muted); font-family: var(--body); font-weight: 600; margin-bottom: 4px; }
+.frame-grid p { margin: 0; }
+.tally { margin: 36px 0 0; }
+.tally-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; max-width: 620px; background: var(--rule); }
+.tally-bar span { display: block; height: 100%; }
+.tally-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 14px; color: var(--muted); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
+/* Confidence glyph: solid = verified, hatched = estimated, hollow = assumption */
+.conf { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
+.conf i { width: 11px; height: 11px; border-radius: 2px; border: 1.5px solid var(--ink); display: inline-block; flex: none; }
+.conf.verified i { background: var(--ink); }
+.conf.estimated i { background: repeating-linear-gradient(-45deg, var(--ink) 0 1.5px, transparent 1.5px 3.5px); }
+.conf.assumption i { border-style: dashed; }
+.conf:hover { color: var(--ink); }
+.legend-row { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); margin: 0 0 18px; }
+.legend-row .conf { cursor: default; }
+
+.pop { position: absolute; z-index: 30; max-width: 320px; background: var(--ink); color: var(--paper); font-size: 13.5px; line-height: 1.45; padding: 10px 12px; border-radius: var(--radius-s); box-shadow: 0 6px 24px rgba(0,0,0,.18); }
+.pop b { display: block; margin-bottom: 2px; }
+
+/* State pill */
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 1px 8px 1px 6px; border-radius: 10px; border: 1px solid currentColor; line-height: 1.6; background: none; cursor: pointer; white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.proposed::before { background: none; border: 1.5px dashed currentColor; width: 6px; height: 6px; }
+.st-accepted { color: var(--s-accepted); } .st-rejected { color: var(--s-rejected); } .st-superseded { color: var(--s-superseded); }
+.st-parked { color: var(--s-parked); } .st-proposed { color: var(--s-proposed); }
+
+/* Filters */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.chip { font-size: 13px; padding: 3px 10px; border-radius: 14px; border: 1px solid var(--rule); background: var(--surface); color: var(--muted); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-m); padding: 18px; }
+
+/* River */
+.river svg text { font-family: var(--body); }
+.river .lane { cursor: pointer; }
+.river .lane:hover .lane-bg, .river .lane:focus .lane-bg { fill: var(--band); }
+.river .lane:focus { outline: none; }
+.river .lane:focus .lane-bg { stroke: var(--accent); stroke-width: 1.5; }
+
+/* Journey */
+.journey { list-style: none; margin: 0; padding: 0; counter-reset: ch; }
+.journey > li { position: relative; padding: 0 0 30px 44px; counter-increment: ch; }
+.journey > li::before { content: counter(ch); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; font-size: 13px; font-weight: 600; background: var(--paper); }
+.journey > li::after { content: ""; position: absolute; left: 14px; top: 30px; bottom: 2px; width: 1.5px; background: var(--rule); }
+.journey > li:last-child::after { display: none; }
+.journey .date { font-size: 13px; color: var(--faint); }
+.journey h3 { margin: 0 0 4px; }
+.journey p { margin: 0 0 10px; }
+.changes { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.changes li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; }
+
+/* Board */
+.board { display: grid; grid-template-columns: repeat(4, minmax(200px, 1fr)); gap: 14px; }
+.col h3 { font-size: 15px; font-family: var(--body); font-weight: 600; display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 2px solid currentColor; margin-bottom: 10px; }
+.col .count { font-weight: 400; color: var(--faint); }
+.card { color: var(--ink); display: block; width: 100%; text-align: left; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-m); padding: 11px 12px; margin-bottom: 8px; cursor: pointer; }
+.card:hover { border-color: var(--faint); }
+.card .t { font-weight: 600; font-size: 15px; line-height: 1.3; }
+.card .r { font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.card .hist { display: flex; gap: 3px; margin-top: 8px; }
+.card .hist span { width: 14px; height: 4px; border-radius: 2px; background: currentColor; }
+.col.cut .card .t { text-decoration: line-through; text-decoration-color: var(--faint); }
+
+/* Two column lists */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.two h3 { display: flex; align-items: center; gap: 8px; }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { padding: 10px 0; border-top: 1px solid var(--rule); }
+.items li:first-child { border-top: 0; }
+.items .why { color: var(--muted); font-size: 14.5px; margin-top: 2px; }
+.mark { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--surface); flex: none; }
+.weight { display: inline-flex; gap: 3px; margin-left: 8px; vertical-align: 1px; }
+.weight span { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); }
+
+/* Costs */
+.tabs { display: flex; gap: 4px; margin: 0 0 14px; border-bottom: 1px solid var(--rule); }
+.tab { background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 12px; cursor: pointer; color: var(--muted); margin-bottom: -1px; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+.proj-ctl { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 4px 0 10px; font-size: 14.5px; }
+.proj-ctl input[type=range] { width: 220px; accent-color: var(--ink); }
+.proj-total { font-family: var(--display); font-size: 26px; font-weight: 700; }
+.cat-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 8px 0; max-width: 520px; }
+.cat-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--muted); }
+
+/* Tech */
+.stack { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--radius-m); overflow: hidden; }
+.layer { display: grid; grid-template-columns: 130px 1fr; background: var(--surface); }
+.layer .ln { padding: 14px; font-weight: 600; font-size: 14px; color: var(--muted); border-right: 1px solid var(--rule); text-transform: capitalize; }
+.layer .lc { padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tech-chip { border: 1.5px solid var(--s-accepted); border-radius: var(--radius-s); padding: 4px 10px; background: none; cursor: pointer; font-weight: 600; font-size: 14.5px; }
+.tech-chip.later { border-style: dashed; }
+.tech-chip small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+.tech-alt { font-size: 13.5px; color: var(--faint); text-decoration: line-through; background: none; border: 0; cursor: pointer; padding: 0; }
+
+/* Skills */
+.skill-row { display: grid; grid-template-columns: minmax(130px, 220px) 120px 1fr auto; gap: 14px; align-items: center; padding: 9px 0; border-top: 1px solid var(--rule); font-size: 15px; }
+.skill-row:first-child { border-top: 0; }
+.meter { display: flex; gap: 4px; }
+.meter span { width: 18px; height: 8px; border-radius: 2px; background: var(--rule); }
+.meter span.on { background: var(--ink); }
+.have { font-size: 12.5px; font-weight: 600; padding: 1px 8px; border-radius: 10px; }
+.have.yes { color: var(--good); border: 1px solid var(--good); }
+.have.partial { color: var(--s-parked); border: 1px solid var(--s-parked); }
+.have.no { color: var(--bad); border: 1px solid var(--bad); }
+.skill-row .nf { color: var(--muted); font-size: 14px; }
+
+/* Team */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.role { display: flex; gap: 12px; align-items: flex-start; }
+.people { display: flex; gap: 2px; flex-wrap: wrap; max-width: 80px; }
+.role .why { color: var(--muted); font-size: 14px; }
+
+/* Risks */
+.risk-wrap { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 28px; align-items: start; }
+.risk-list { list-style: none; margin: 0; padding: 0; }
+.risk-list li { padding: 10px 8px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 26px 1fr; gap: 8px; border-radius: var(--radius-s); }
+.risk-list li.hi { background: var(--band); }
+.risk-list .n { font-weight: 700; }
+.risk-list .mit { color: var(--muted); font-size: 14px; }
+
+/* Questions */
+.q { padding: 14px 0; border-top: 1px solid var(--rule); }
+.q:first-child { border-top: 0; }
+.q .qt { font-weight: 600; font-size: 16.5px; }
+.q .wm { color: var(--muted); font-size: 14.5px; margin: 2px 0 6px; }
+.q .blocks { font-size: 13.5px; color: var(--faint); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+/* Sources */
+.src-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.src-table td, .src-table th { text-align: left; padding: 7px 10px 7px 0; border-top: 1px solid var(--rule); vertical-align: top; }
+.src-table th { font-weight: 600; color: var(--muted); border-top: 0; }
+
+/* Drawer */
+dialog.drawer { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(460px, 100vw); border: 0; padding: 0; background: var(--surface); color: var(--ink); box-shadow: -8px 0 40px rgba(0,0,0,.18); }
+dialog.drawer::backdrop { background: rgba(10, 14, 22, .35); }
+.drawer-in { padding: calc(env(safe-area-inset-top, 0px) + 24px) 26px calc(env(safe-area-inset-bottom, 0px) + 32px); }
+.drawer-close { float: right; background: none; border: 1px solid var(--rule); border-radius: var(--radius-s); padding: 3px 10px; cursor: pointer; }
+.drawer h2 { font-size: 24px; margin: 6px 0 6px; padding-right: 60px; }
+.drawer .meta { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+.hist-list { list-style: none; padding: 0; margin: 0; }
+.hist-list li { position: relative; padding: 0 0 20px 26px; }
+.hist-list li::before { content: ""; position: absolute; left: 5px; top: 18px; bottom: 0; width: 1.5px; background: var(--rule); }
+.hist-list li:last-child::before { display: none; }
+.hist-list .hd { position: absolute; left: 0; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+.hist-list .hd.proposed { background: none; border: 2px dashed currentColor; }
+.hist-list .when { font-size: 13px; color: var(--faint); }
+.hist-list .reason { margin-top: 2px; color: var(--ink); }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; }
+
+.empty { color: var(--muted); padding: 60px 0; }
+footer.foot { margin-top: 56px; color: var(--faint); font-size: 13px; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 0; padding: 24px 18px 64px; }
+  nav.toc { position: static; margin-bottom: 28px; }
+  nav.toc ol { display: flex; flex-wrap: wrap; gap: 4px 14px; border: 0; }
+  nav.toc a { padding: 2px 0; border: 0; }
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .stage-labels { font-size: 11.5px; }
+  .highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two, .risk-wrap { grid-template-columns: 1fr; }
+  .skill-row { grid-template-columns: 1fr auto; }
+  .skill-row .nf { grid-column: 1 / -1; }
+  .layer { grid-template-columns: 96px 1fr; }
+}
+@media (max-width: 520px) { .board { grid-template-columns: 1fr !important; } .hl .val { font-size: 26px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1, .hero .one-liner { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  .hero .one-liner { animation-delay: .08s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+}
+@media print {
+  nav.toc, .chips, .theme-btn, .tabs, .proj-ctl input { display: none !important; }
+  .layout { display: block; padding: 0; }
+  body { background: #fff; }
+  section.sec { break-inside: avoid-page; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Sections"><p class="toc-title" id="toc-title"></p><ol id="toc"></ol><button class="theme-btn" id="theme-btn" type="button">Switch theme</button></nav>
+  <main id="main"></main>
+</div>
+<dialog class="drawer" id="drawer" aria-labelledby="drawer-title"><div class="drawer-in" id="drawer-in"></div></dialog>
+
+<script>
+const DOSSIER = {"meta": {"title": "tidyfiles: idea dossier", "audience": "personal", "generated": "2026-10-13", "currency": "USD", "section_order": ["summary", "journey", "decisions", "features", "open_questions", "plan", "costs", "tech", "skills", "team", "dos_donts", "risks", "validation", "pros_cons", "sources"], "collapsed": []}, "summary": {"name": "tidyfiles", "one_liner": "A CLI that sorts your Downloads folder by rules you write in one TOML file.", "stage": "idea", "status": "Language and core behaviour chosen; nothing built yet.", "problem": "Downloads fills up with installers, PDFs and screenshots that never get filed.", "highlights": []}, "decisions": [{"id": "D-001", "title": "Rust", "area": "tech", "current_state": "superseded", "phase": "mvp", "layer": "tooling", "superseded_by": "D-003", "revives": null, "details": null, "history": [{"state": "accepted", "date": "2026-10-13", "reason": "Fast single binary", "source": "live", "iteration": "I-001"}, {"state": "superseded", "date": "2026-10-13", "reason": "Speed of a binary does not matter for a once-a-day sort", "source": "live", "iteration": "I-001"}]}, {"id": "D-002", "title": "Watch mode", "area": "feature", "current_state": "parked", "phase": null, "layer": null, "superseded_by": null, "revives": null, "details": null, "history": [{"state": "proposed", "date": "2026-10-13", "reason": null, "source": "live", "iteration": "I-001"}, {"state": "parked", "date": "2026-10-13", "reason": "Running it on demand covers the need for now", "source": "live", "iteration": "I-001"}]}, {"id": "D-003", "title": "Python with Typer", "area": "tech", "current_state": "accepted", "phase": "mvp", "layer": "tooling", "superseded_by": null, "revives": null, "details": null, "history": [{"state": "accepted", "date": "2026-10-13", "reason": "Faster to iterate on for a weekend project", "source": "live", "iteration": "I-001"}]}, {"id": "D-004", "title": "Dry-run by default", "area": "feature", "current_state": "accepted", "phase": "mvp", "layer": null, "superseded_by": null, "revives": null, "details": null, "history": [{"state": "accepted", "date": "2026-10-13", "reason": "Moving files is destructive; show the plan before acting", "source": "live", "iteration": "I-001"}]}, {"id": "D-005", "title": "Publish to PyPI", "area": "ops", "current_state": "proposed", "phase": null, "layer": null, "superseded_by": null, "revives": null, "details": null, "history": [{"state": "proposed", "date": "2026-10-13", "reason": null, "source": "live", "iteration": "I-001"}]}], "journey": [{"id": "I-001", "title": "Initial brainstorm", "date": "2026-10-13", "summary": "Started in Rust, switched to Python once it was clear speed didn't matter for a daily sort, and made dry-run the default.", "changes": [{"decision_id": "D-001", "to": "accepted", "text": "Rust: Fast single binary"}, {"decision_id": "D-001", "to": "superseded", "text": "Rust: Speed of a binary does not matter for a once-a-day sort"}, {"decision_id": "D-002", "to": "proposed", "text": "Watch mode"}, {"decision_id": "D-002", "to": "parked", "text": "Watch mode: Running it on demand covers the need for now"}, {"decision_id": "D-003", "to": "accepted", "text": "Python with Typer: Faster to iterate on for a weekend project"}, {"decision_id": "D-004", "to": "accepted", "text": "Dry-run by default: Moving files is destructive; show the plan before acting"}, {"decision_id": "D-005", "to": "proposed", "text": "Publish to PyPI"}]}], "features": {"intro": "The MVP is a safe, run-on-demand sorter."}, "tech": {"intro": "Chosen for speed of iteration, not runtime speed."}, "dos_donts": {"do": [], "dont": [{"text": "Never delete files, only move them", "why": "An undo is impossible after a delete"}]}, "open_questions": [{"id": "Q-D-005", "text": "Undecided: Publish to PyPI", "why_it_matters": "Decides whether others can install it with one command", "blocks": ["D-005"]}], "sources": [{"id": "live", "tool": "Claude Code", "title": "Brainstorm session", "started": "2026-10-13", "ended": "2026-10-13", "messages": null}]};
+
+(function () {
+"use strict";
+const D = DOSSIER;
+const main = document.getElementById("main");
+if (!D) { main.innerHTML = '<p class="empty">No dossier data is embedded in this file yet. Build it with <code>scripts/build_dossier.py</code>.</p>'; return; }
+
+/* ---------- helpers ---------- */
+const SVGNS = "http://www.w3.org/2000/svg";
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    const v = attrs[k];
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return e;
+}
+function s(tag, attrs, ...kids) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in (attrs || {})) {
+    const v = attrs[k];
+    if (v == null || v === false) continue;
+    if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) e.append(c);
+  return e;
+}
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const STATES = ["accepted", "parked", "proposed", "superseded", "rejected"];
+const STATE_LABEL = { accepted: "Accepted", rejected: "Rejected", superseded: "Superseded", parked: "Parked", proposed: "Proposed" };
+const stateVar = (st) => `var(--s-${STATES.includes(st) ? st : "proposed"})`;
+const CONF_TEXT = { verified: "Verified", estimated: "Estimated", assumption: "Assumption" };
+const currency = (D.costs && D.costs.currency) || (D.meta && D.meta.currency) || "USD";
+let moneyFmt;
+try { moneyFmt = new Intl.NumberFormat(undefined, { style: "currency", currency, maximumFractionDigits: 0 }); }
+catch (e) { moneyFmt = { format: (n) => currency + " " + Math.round(n).toLocaleString() }; }
+const money = (n) => moneyFmt.format(n);
+const num = (n) => (typeof n === "number" ? (Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { maximumFractionDigits: 1 })) : String(n));
+function parseDate(d) { if (!d) return null; const t = Date.parse(d); return isNaN(t) ? null : t; }
+function fmtDate(d) { const t = parseDate(d); if (t == null) return d || ""; return new Date(t).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }); }
+function fmtShort(t) { return new Date(t).toLocaleDateString(undefined, { day: "numeric", month: "short" }); }
+
+/* popover for confidence badges */
+let popEl = null;
+function closePop() { if (popEl) { popEl.remove(); popEl = null; } }
+document.addEventListener("click", (e) => { if (popEl && !popEl.contains(e.target) && !e.target.closest(".conf")) closePop(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePop(); });
+function confBadge(obj, label) {
+  const c = (obj && obj.confidence) || "assumption";
+  const detail = c === "verified" ? (obj.source_ref ? "Source: " + obj.source_ref : "") : c === "estimated" ? (obj.basis ? "How: " + obj.basis : "") : (obj.basis || "Not yet checked against anything.");
+  const b = h("button", { class: "conf " + c, type: "button", "aria-label": CONF_TEXT[c] + (detail ? ". " + detail : "") }, h("i"), label || CONF_TEXT[c]);
+  b.addEventListener("click", (e) => {
+    e.stopPropagation(); closePop();
+    popEl = h("div", { class: "pop", role: "status" }, h("b", { text: CONF_TEXT[c] }), detail || "No further detail recorded.");
+    document.body.append(popEl);
+    const r = b.getBoundingClientRect();
+    const left = Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - popEl.offsetWidth - 12);
+    popEl.style.left = Math.max(8, left) + "px";
+    popEl.style.top = (window.scrollY + r.bottom + 6) + "px";
+  });
+  return b;
+}
+function confLegend() {
+  return h("div", { class: "legend-row", "aria-label": "Confidence legend" },
+    h("span", { class: "conf verified" }, h("i"), "Verified: checked against a source"),
+    h("span", { class: "conf estimated" }, h("i"), "Estimated: reasoned from something concrete"),
+    h("span", { class: "conf assumption" }, h("i"), "Assumption: still a guess"));
+}
+/* SVG hatch patterns keyed per svg */
+let patSeq = 0;
+function confDefs(svg, color) {
+  const id = "p" + (++patSeq);
+  svg.append(s("defs", {}, s("pattern", { id, width: 5, height: 5, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" },
+    s("rect", { width: 5, height: 5, fill: "none" }), s("line", { x1: 0, y1: 0, x2: 0, y2: 5, stroke: color, "stroke-width": 2.2 }))));
+  return (conf) => conf === "verified" ? { fill: color, stroke: color } : conf === "estimated" ? { fill: `url(#${id})`, stroke: color } : { fill: "none", stroke: color, "stroke-dasharray": "4 3" };
+}
+function pill(state, onclick) {
+  return h(onclick ? "button" : "span", { class: `pill ${state} st-${state}`, type: onclick ? "button" : null, onclick }, STATE_LABEL[state] || state);
+}
+
+/* ---------- decisions index ---------- */
+const decisions = (D.decisions || []).map((d) => {
+  const hist = (d.history || []).slice();
+  const cur = d.current_state || (hist.length ? hist[hist.length - 1].state : "proposed");
+  return Object.assign({}, d, { history: hist, current_state: cur });
+});
+const decById = Object.fromEntries(decisions.map((d) => [d.id, d]));
+const lastReason = (d) => { for (let i = d.history.length - 1; i >= 0; i--) if (d.history[i].reason) return d.history[i].reason; return d.details || ""; };
+
+/* ---------- drawer ---------- */
+const drawer = document.getElementById("drawer");
+const drawerIn = document.getElementById("drawer-in");
+drawer.addEventListener("click", (e) => { if (e.target === drawer) drawer.close(); });
+const sourceLabel = (src) => {
+  if (!src) return "";
+  if (src === "live") return "this conversation";
+  const sid = src.split("#")[0];
+  const so = (D.sources || []).find((x) => x.id === sid);
+  return so ? `${so.tool}: ${so.title} (${src})` : src;
+};
+function openDecision(id) {
+  const d = decById[id]; if (!d) return;
+  drawerIn.replaceChildren();
+  const iterTitle = (iid) => { const it = (D.journey || []).find((j) => j.id === iid); return it ? it.title : null; };
+  const phaseNote = d.current_state === "accepted" && d.phase ? (d.phase === "mvp" ? "in the MVP" : "after the MVP")
+    : d.current_state === "parked" ? "deferred" : null;
+  drawerIn.append(...[
+    h("button", { class: "drawer-close", type: "button", onclick: () => drawer.close() }, "Close"),
+    pill(d.current_state),
+    h("h2", { id: "drawer-title", text: d.title }),
+    h("div", { class: "meta" }, [d.area, d.layer, phaseNote].filter(Boolean).join(", ")),
+    d.details ? h("p", { text: d.details }) : null,
+    d.superseded_by && decById[d.superseded_by] ? h("p", {}, "Replaced by ", h("button", { class: "linkish", type: "button", onclick: () => openDecision(d.superseded_by) }, decById[d.superseded_by].title), ".") : null,
+    d.revives && decById[d.revives] ? h("p", {}, "Brings back part of ", h("button", { class: "linkish", type: "button", onclick: () => openDecision(d.revives) }, decById[d.revives].title), ", which was " + (STATE_LABEL[decById[d.revives].current_state] || "").toLowerCase() + ".") : null,
+    (() => { const rev = decisions.filter((x) => x.revives === d.id); return rev.length ? h("p", {}, "Partly revived as ", ...rev.map((x, i) => [i ? ", " : "", h("button", { class: "linkish", type: "button", onclick: () => openDecision(x.id) }, x.title)]), ".") : null; })(),
+    h("h3", { text: "How this decision moved" }),
+    h("ol", { class: "hist-list" }, d.history.map((ev) => h("li", { class: "st-" + ev.state },
+      h("span", { class: "hd " + ev.state }),
+      h("div", {}, h("strong", { text: STATE_LABEL[ev.state] || ev.state })),
+      h("div", { class: "when" }, [fmtDate(ev.date), iterTitle(ev.iteration), sourceLabel(ev.source)].filter(Boolean).join(", ")),
+      ev.reason ? h("div", { class: "reason", text: ev.reason }) : null)))
+  ].filter(Boolean));
+  if (!drawer.open) drawer.showModal();
+}
+
+/* ---------- section builders ---------- */
+const TITLES = {
+  summary: "Overview", journey: "How we got here", decisions: "Every decision", features: "What's in, what's out",
+  validation: "Evidence", pros_cons: "Pros and cons", dos_donts: "Do's and don'ts", plan: "Plan", costs: "Costs",
+  tech: "Technology", skills: "Skills needed", team: "Team", risks: "Risks", open_questions: "Open questions", sources: "Sources"
+};
+const builders = {};
+
+builders.summary = (S) => {
+  const stages = ["idea", "research", "validating", "building", "launched"];
+  const si = Math.max(0, stages.indexOf(S.stage));
+  const wrap = h("div", { class: "hero" },
+    h("h1", { text: S.name || D.meta.title }),
+    S.one_liner ? h("p", { class: "one-liner", text: S.one_liner }) : null);
+  if (S.stage) {
+    wrap.append(
+      h("div", { class: "stage-track", "aria-hidden": "true" }, stages.map((st, i) => h("span", { class: "st" + (i <= si && S.stage !== "paused" ? " done" : "") }))),
+      h("div", { class: "stage-labels" }, stages.map((st) => h("span", { class: st === S.stage ? "cur" : "" }, st[0].toUpperCase() + st.slice(1)))));
+  }
+  if (S.status) wrap.append(h("p", { class: "status-line" }, S.stage === "paused" ? "Paused. " : "", S.status));
+  if ((S.highlights || []).length) {
+    wrap.append(h("div", { class: "highlights" }, S.highlights.map((hl) => {
+      const isMoney = /^(USD|EUR|GBP|INR|JPY|AUD|CAD)/.test(hl.unit || "");
+      const unitRest = isMoney ? (hl.unit || "").replace(/^[A-Z]{3}/, "") : hl.unit;
+      const v = isMoney ? money(hl.value) : num(hl.value);
+      return h("div", { class: "hl" },
+        h("div", { class: "lab", text: hl.label }),
+        h("div", { class: "val" }, v, unitRest ? h("small", { text: unitRest.replace(/^\//, "per ") }) : null),
+        hl.low != null && hl.high != null ? h("div", { class: "range" }, "Range " + (isMoney ? money(hl.low) + " to " + money(hl.high) : num(hl.low) + " to " + num(hl.high))) : h("div", { class: "range" }, "\u00a0"),
+        confBadge(hl));
+    })));
+  }
+  const frames = [["problem", "The problem"], ["solution", "The idea"], ["audience", "Who it's for"], ["why_now", "Why now"], ["objective", "The objective"]].filter(([k]) => S[k]);
+  if (frames.length) wrap.append(h("div", { class: "frame-grid" }, frames.map(([k, t]) => h("div", {}, h("h3", { text: t }), h("p", { text: S[k] })))));
+  if (decisions.length) {
+    const counts = {}; decisions.forEach((d) => counts[d.current_state] = (counts[d.current_state] || 0) + 1);
+    const order = STATES.filter((st) => counts[st]);
+    wrap.append(h("div", { class: "tally" },
+      h("h3", { text: `${decisions.length} decisions shaped this` }),
+      h("div", { class: "tally-bar", role: "img", "aria-label": order.map((st) => `${counts[st]} ${st}`).join(", ") }, order.map((st) => h("span", { style: `width:${100 * counts[st] / decisions.length}%;background:${stateVar(st)}` }))),
+      h("div", { class: "tally-legend" }, order.map((st) => h("span", {}, h("span", { class: "dot", style: `background:${stateVar(st)}` }), `${counts[st]} ${STATE_LABEL[st].toLowerCase()}`)))));
+  }
+  return { node: wrap, bare: true };
+};
+
+builders.journey = (J) => {
+  const list = h("ol", { class: "journey" }, J.map((ch) => h("li", {},
+    h("div", { class: "date", text: fmtDate(ch.date) }),
+    h("h3", { text: ch.title }),
+    ch.summary ? h("p", { text: ch.summary }) : null,
+    (ch.changes || []).length ? h("ul", { class: "changes" }, ch.changes.map((c) => h("li", {},
+      pill(c.to, decById[c.decision_id] ? () => openDecision(c.decision_id) : null), h("span", { text: c.text })))) : null)));
+  return { lede: "Each chapter is a shift in direction. Select a change to see the full story behind it.", node: list };
+};
+
+builders.decisions = () => {
+  const areas = [...new Set(decisions.map((d) => d.area || "other"))];
+  const filt = { areas: new Set(areas), hideRejected: false };
+  const holder = h("div", { class: "river scroll-x panel" });
+  const chips = h("div", { class: "chips", role: "group", "aria-label": "Filter decisions" },
+    areas.map((a) => h("button", { class: "chip", type: "button", "aria-pressed": "true", onclick: (e) => { const b = e.currentTarget; if (filt.areas.has(a)) filt.areas.delete(a); else filt.areas.add(a); b.setAttribute("aria-pressed", filt.areas.has(a)); draw(); } }, a)),
+    h("button", { class: "chip", type: "button", "aria-pressed": "false", onclick: (e) => { filt.hideRejected = !filt.hideRejected; e.currentTarget.setAttribute("aria-pressed", filt.hideRejected); draw(); } }, "Hide rejected and superseded"));
+  const legend = h("div", { class: "tally-legend", style: "margin:0 0 12px" }, STATES.map((st) => h("span", {}, h("span", { class: "dot", style: `background:${stateVar(st)}` }), STATE_LABEL[st])));
+
+  function draw() {
+    const rows = decisions.filter((d) => filt.areas.has(d.area || "other") && !(filt.hideRejected && ["rejected", "superseded"].includes(d.current_state)))
+      .sort((a, b) => (areas.indexOf(a.area || "other") - areas.indexOf(b.area || "other")) || ((parseDate(a.history[0] && a.history[0].date) || 0) - (parseDate(b.history[0] && b.history[0].date) || 0)));
+    const allDates = decisions.flatMap((d) => d.history.map((e) => parseDate(e.date))).concat((D.journey || []).map((j) => parseDate(j.date))).filter((t) => t != null);
+    let t0 = Math.min(...allDates), t1 = Math.max(...allDates);
+    if (!isFinite(t0)) { t0 = 0; t1 = 1; }
+    const span = Math.max(t1 - t0, 86400000 * 3);
+    const end = t1 + span * 0.06;
+    const LW = 210, W = 980, LH = 30, TOP = 46;
+    const H = TOP + rows.length * LH + 16;
+    const x = (t) => LW + (W - LW - 24) * ((t - t0) / (end - t0));
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": "Decision river: each row is a decision; color shows its state over time" });
+    // iteration bands
+    const iters = (D.journey || []).filter((j) => parseDate(j.date) != null).sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    iters.forEach((it, i) => {
+      const a = x(parseDate(it.date)), b = i + 1 < iters.length ? x(parseDate(iters[i + 1].date)) : x(end);
+      if (i % 2 === 0) svg.append(s("rect", { x: a, y: 0, width: Math.max(0, b - a), height: H, fill: css("--band"), opacity: 0.7 }));
+      svg.append(s("line", { x1: a, x2: a, y1: 0, y2: H, stroke: css("--rule") }));
+      const full = (i + 1) + ". " + it.title, maxChars = Math.max(2, Math.floor((b - a - 10) / 6.6));
+      svg.append(s("text", { x: a + 6, y: 16, "font-size": 12, fill: css("--muted"), text: full.length > maxChars ? full.slice(0, Math.max(1, maxChars - 1)) + "…" : full }, s("title", { text: it.title })));
+    });
+    // date ticks
+    const nT = Math.max(1, Math.min(5, Math.round((t1 - t0) / 86400000)));
+    let lastLab = null;
+    for (let i = 0; i <= nT; i++) { const t = t0 + (t1 - t0) * i / nT, lab = fmtShort(t); if (lab === lastLab) continue; lastLab = lab; svg.append(s("text", { x: x(t), y: 34, "font-size": 11, fill: css("--faint"), "text-anchor": "middle", text: lab })); }
+    const laneY = {};
+    rows.forEach((d, i) => { laneY[d.id] = TOP + i * LH + LH / 2; });
+    rows.forEach((d, i) => {
+      const y = laneY[d.id];
+      const g = s("g", { class: "lane", tabindex: 0, role: "button", "aria-label": `${d.title}: ${STATE_LABEL[d.current_state]}. ${lastReason(d)}` });
+      g.addEventListener("click", () => openDecision(d.id));
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDecision(d.id); } });
+      g.append(s("rect", { class: "lane-bg", x: 0, y: y - LH / 2 + 1, width: W, height: LH - 2, rx: 4, fill: "transparent" }));
+      const label = d.title.length > 28 ? d.title.slice(0, 27) + "…" : d.title;
+      g.append(s("text", { x: 8, y: y + 4, "font-size": 13, fill: css("--ink"), "text-decoration": ["rejected", "superseded"].includes(d.current_state) ? "line-through" : null, text: label }, s("title", { text: d.title })));
+      const ev = d.history.map((e, k) => ({ ...e, t: parseDate(e.date) != null ? parseDate(e.date) : t0 + (t1 - t0) * k / Math.max(1, d.history.length - 1) }));
+      ev.forEach((e, k) => {
+        const xa = x(e.t);
+        const terminal = e.state === "rejected" || e.state === "superseded";
+        const xb = k + 1 < ev.length ? x(ev[k + 1].t) : (terminal ? xa : x(end));
+        const col = css("--s-" + (STATES.includes(e.state) ? e.state : "proposed"));
+        if (xb > xa) g.append(s("line", { x1: xa, x2: xb, y1: y, y2: y, stroke: col, "stroke-width": e.state === "accepted" ? 6 : 4, "stroke-linecap": "round", "stroke-dasharray": e.state === "proposed" ? "2 5" : e.state === "parked" ? "8 4" : null }));
+      });
+      ev.forEach((e) => {
+        const xa = x(e.t), col = css("--s-" + (STATES.includes(e.state) ? e.state : "proposed"));
+        if (e.state === "rejected") g.append(s("path", { d: `M${xa - 5} ${y - 5} L${xa + 5} ${y + 5} M${xa + 5} ${y - 5} L${xa - 5} ${y + 5}`, stroke: col, "stroke-width": 2.4, "stroke-linecap": "round" }));
+        else g.append(s("circle", { cx: xa, cy: y, r: 4.5, fill: e.state === "proposed" ? css("--surface") : col, stroke: col, "stroke-width": 1.8 }));
+      });
+      svg.append(g);
+    });
+    // superseded and revives connectors
+    rows.forEach((d) => {
+      const links = [];
+      if (d.superseded_by && laneY[d.superseded_by]) links.push([d, decById[d.superseded_by], "--s-superseded", null]);
+      if (d.revives && laneY[d.revives]) links.push([decById[d.revives], d, "--s-accepted", "3 3"]);
+      links.forEach(([from, to, colVar, dash]) => {
+        const fe = from.history[from.history.length - 1], te = to.history[0];
+        const fx = x(parseDate(fe && fe.date) || t1), tx = x(parseDate(te && te.date) || t1);
+        const fy = laneY[from.id], ty = laneY[to.id];
+        const mx = Math.max(fx, tx) + 14;
+        svg.append(s("path", { d: `M${fx + 6} ${fy} C${mx} ${fy}, ${mx} ${ty}, ${tx + 6} ${ty}`, fill: "none", stroke: css(colVar), "stroke-width": 1.4, "stroke-dasharray": dash, opacity: 0.85, "pointer-events": "none" }));
+      });
+    });
+    holder.replaceChildren(svg);
+  }
+  draw();
+  const node = h("div", {}, chips, legend, holder);
+  node._redraw = draw;
+  return { lede: "Each row is one decision, left to right through time. Solid is accepted, dashed is proposed or parked, a cross is a rejection, and curves connect a decision to what replaced or revived it. Select a row for its full reasoning.", node };
+};
+
+builders.features = (F) => {
+  const feats = decisions.filter((d) => d.area === "feature" || d.area === "scope");
+  const cols = [
+    ["MVP", "st-accepted", (d) => d.current_state === "accepted" && d.phase !== "later"],
+    ["Later", "st-parked", (d) => (d.current_state === "accepted" && d.phase === "later") || d.current_state === "parked"],
+    ["Undecided", "st-proposed", (d) => d.current_state === "proposed"],
+    ["Cut", "st-rejected cut", (d) => d.current_state === "rejected" || d.current_state === "superseded"]
+  ].map(([name, cls, f]) => [name, cls, feats.filter(f)]).filter(([name, , list]) => list.length || name !== "Undecided");
+  const board = h("div", { class: "board", style: `grid-template-columns:repeat(${cols.length}, minmax(190px,1fr))` }, cols.map(([name, cls, list]) =>
+    h("div", { class: "col " + cls },
+      h("h3", {}, name, h("span", { class: "count", text: list.length })),
+      list.length ? list.map((d) => h("button", { class: "card", type: "button", onclick: () => openDecision(d.id) },
+        h("div", { class: "t", text: d.title }),
+        h("div", { class: "r", text: lastReason(d) }),
+        h("div", { class: "hist", "aria-hidden": "true" }, d.history.map((e) => h("span", { class: "st-" + e.state }))))) : h("p", { class: "r", style: "color:var(--faint);font-size:14px", text: "Nothing here." }))));
+  return { lede: F && F.intro ? F.intro : "Select any card to see how it got there.", node: h("div", { class: "scroll-x" }, board) };
+};
+
+builders.validation = (V) => {
+  const ev = V.evidence || [];
+  const w = { weak: 1, moderate: 2, strong: 3 };
+  const forScore = ev.filter((e) => e.supports === "for").reduce((a, e) => a + (w[e.strength] || 1), 0);
+  const agScore = ev.filter((e) => e.supports !== "for").reduce((a, e) => a + (w[e.strength] || 1), 0);
+  const tot = Math.max(1, forScore + agScore);
+  const balance = h("div", { style: "margin:0 0 22px" },
+    h("div", { class: "tally-bar", style: "max-width:none", role: "img", "aria-label": `Weighted evidence: ${forScore} for, ${agScore} against` },
+      h("span", { style: `width:${100 * agScore / tot}%;background:var(--bad)` }), h("span", { style: `width:${100 * forScore / tot}%;background:var(--good)` })),
+    h("div", { class: "tally-legend", style: "justify-content:space-between" }, h("span", {}, `Against, weighted ${agScore}`), h("span", {}, `For, weighted ${forScore}`)));
+  const W = 900, rowH = 30, mid = W / 2, unit = 70;
+  const sorted = ev.slice().sort((a, b) => (a.supports === b.supports ? (w[b.strength] || 1) - (w[a.strength] || 1) : a.supports === "for" ? -1 : 1));
+  const list = h("ul", { class: "items" }, sorted.map((e) => h("li", { style: "display:grid;grid-template-columns:190px 1fr;gap:16px;align-items:center" },
+    (() => { const svg = s("svg", { viewBox: `0 0 190 14`, width: 190, height: 14, "aria-hidden": "true" });
+      svg.append(s("line", { x1: 95, x2: 95, y1: 0, y2: 14, stroke: css("--rule") }));
+      const len = 28 * (w[e.strength] || 1);
+      svg.append(s("rect", { x: e.supports === "for" ? 95 : 95 - len, y: 2, width: len, height: 10, rx: 2, fill: e.supports === "for" ? css("--good") : css("--bad") }));
+      return svg; })(),
+    h("div", {}, h("div", { text: e.claim }), h("div", { class: "why" }, `${e.supports === "for" ? "Supports" : "Against"}, ${e.strength || "weak"}`, e.source_ref ? `. ${e.source_ref}` : "")))));
+  return { lede: V.verdict || "", node: h("div", {}, balance, list) };
+};
+
+builders.pros_cons = (P) => {
+  const col = (title, items, color, sym) => h("div", {},
+    h("h3", {}, h("span", { class: "mark", style: `background:${color}` }, sym), title),
+    h("ul", { class: "items" }, (items || []).slice().sort((a, b) => (b.weight || 1) - (a.weight || 1)).map((it) => h("li", {}, it.text,
+      h("span", { class: "weight", title: `Weight ${it.weight || 1} of 3` }, [1, 2, 3].map((k) => h("span", { style: k <= (it.weight || 1) ? `background:${color}` : "" })))))));
+  return { node: h("div", { class: "two" }, col("Pros", P.pros, "var(--good)", "+"), col("Cons", P.cons, "var(--bad)", "−")) };
+};
+
+builders.dos_donts = (G) => {
+  const col = (title, items, color, sym) => h("div", {},
+    h("h3", {}, h("span", { class: "mark", style: `background:${color}` }, sym), title),
+    h("ul", { class: "items" }, (items || []).map((it) => h("li", {}, h("div", { style: "font-weight:600", text: it.text }), it.why ? h("div", { class: "why", text: it.why }) : null))));
+  return { lede: "Lessons that came out of the discussion, with the reason behind each.", node: h("div", { class: "two" }, col("Do", G.do, "var(--good)", "✓"), col("Don't", G.dont, "var(--bad)", "✕")) };
+};
+
+builders.plan = (P) => {
+  const ms = (P.milestones || []).slice().sort((a, b) => a.start_week - b.start_week);
+  const maxW = Math.max(4, ...ms.map((m) => m.start_week + m.duration_weeks));
+  const LW = 200, W = 960, RH = 44, TOP = 34;
+  const H = TOP + ms.length * RH + 10;
+  const x = (wk) => LW + (W - LW - 20) * (wk / maxW);
+  const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": "Plan timeline" });
+  const ink = css("--ink");
+  const fillFor = confDefs(svg, ink);
+  const start = parseDate(P.start_date);
+  const step = maxW > 40 ? 8 : maxW > 20 ? 4 : maxW > 10 ? 2 : 1;
+  for (let wk = 0; wk <= maxW; wk += step) {
+    if (x(wk) > W - 50) continue;
+    svg.append(s("line", { x1: x(wk), x2: x(wk), y1: TOP - 6, y2: H, stroke: css("--rule") }));
+    svg.append(s("text", { x: x(wk) + 3, y: 18, "font-size": 11, fill: css("--faint"), text: start != null ? fmtShort(start + wk * 7 * 86400000) : "Week " + wk }));
+  }
+  const rowY = {}; ms.forEach((m, i) => rowY[m.id] = TOP + i * RH);
+  ms.forEach((m) => (m.depends_on || []).forEach((dep) => {
+    const p = ms.find((q) => q.id === dep); if (!p) return;
+    const x1 = x(p.start_week + p.duration_weeks), y1 = rowY[p.id] + RH / 2 - 4, x2 = x(m.start_week), y2 = rowY[m.id] + RH / 2 - 4;
+    svg.append(s("path", { d: `M${x1} ${y1} H${Math.max(x1 + 6, x2 - 6)} V${y2} H${x2}`, fill: "none", stroke: css("--faint"), "stroke-width": 1.2 }));
+  }));
+  ms.forEach((m) => {
+    const y = rowY[m.id];
+    const g = s("g", {});
+    g.append(s("text", { x: 4, y: y + RH / 2 - 6, "font-size": 14, "font-weight": 600, fill: ink, text: m.name.length > 24 ? m.name.slice(0, 23) + "…" : m.name }, s("title", { text: m.name })));
+    g.append(s("text", { x: 4, y: y + RH / 2 + 10, "font-size": 11.5, fill: css("--muted"), text: `${num(m.duration_weeks)} weeks, ${(CONF_TEXT[m.confidence] || "Assumption").toLowerCase()}` }));
+    const bx = x(m.start_week), bw = Math.max(4, x(m.start_week + m.duration_weeks) - bx);
+    g.append(s("rect", Object.assign({ x: bx, y: y + 8, width: bw, height: RH - 24, rx: 3, "stroke-width": 1.5 }, fillFor(m.confidence))));
+    if (m.is_mvp) {
+      const fx = bx + bw;
+      g.append(s("line", { x1: fx, x2: fx, y1: TOP - 6, y2: H, stroke: css("--s-accepted"), "stroke-width": 2 }));
+      g.append(s("text", { x: fx + 5, y: y + 6, "font-size": 12, "font-weight": 600, fill: css("--s-accepted"), text: "MVP ready" }));
+    }
+    g.append(s("title", { text: `${m.name}: ${m.goal || ""}` }));
+    svg.append(g);
+  });
+  const detail = h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:22px" }, ms.map((m) => h("div", {},
+    h("h3", { text: m.name }),
+    m.goal ? h("p", { style: "margin:0 0 6px", text: m.goal }) : null,
+    (m.deliverables || []).length ? h("ul", { style: "margin:0 0 8px;padding-left:18px;color:var(--muted);font-size:14.5px" }, m.deliverables.map((x) => h("li", { text: x }))) : null,
+    confBadge(m, `${num(m.duration_weeks)} weeks, ${(CONF_TEXT[m.confidence] || "Assumption").toLowerCase()}`))));
+  return { node: h("div", {}, confLegend(), h("div", { class: "scroll-x panel" }, svg), detail) };
+};
+
+builders.costs = (C) => {
+  const items = C.items || [];
+  const kinds = [["monthly", "Monthly"], ["one_time", "One-time"], ["yearly", "Yearly"]].filter(([k]) => items.some((i) => i.kind === k));
+  const CATS = ["infra", "tools", "people", "marketing", "legal", "hardware", "other"];
+  const catColor = (c) => ({ infra: "#2448B5", tools: "#0E7C66", people: "#6B4FD8", marketing: "#B7791F", legal: "#C2362B", hardware: "#3A7CA5", other: "#7A8499" })[CATS.includes(c) ? c : "other"];
+  const out = h("div", {}, confLegend());
+  const tabs = h("div", { class: "tabs", role: "tablist" });
+  const pane = h("div", { class: "panel scroll-x", role: "tabpanel" });
+  function drawKind(kind) {
+    const list = items.filter((i) => i.kind === kind).sort((a, b) => (b.high || b.value) - (a.high || a.value));
+    const max = Math.max(1, ...list.map((i) => i.high != null ? i.high : i.value));
+    const LW = 250, W = 900, RH = 40, H = list.length * RH + 30;
+    const x = (v) => LW + (W - LW - 110) * (v / max);
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": `${kind} costs` });
+    const ink = css("--ink");
+    list.forEach((it, i) => {
+      const y = i * RH + 8;
+      const col = catColor(it.category);
+      const fillFor = confDefs(svg, col);
+      svg.append(s("text", { x: 4, y: y + 15, "font-size": 14, fill: ink, text: it.label.length > 32 ? it.label.slice(0, 31) + "…" : it.label }, s("title", { text: it.label })));
+      svg.append(s("text", { x: 4, y: y + 30, "font-size": 11.5, fill: css("--muted"), text: `${it.category || "other"}, ${(CONF_TEXT[it.confidence] || "Assumption").toLowerCase()}` }));
+      if (it.low != null && it.high != null) svg.append(s("rect", { x: x(it.low), y: y + 13, width: Math.max(2, x(it.high) - x(it.low)), height: 6, rx: 3, fill: col, opacity: 0.22 }));
+      svg.append(s("rect", Object.assign({ x: LW, y: y + 6, width: Math.max(2, x(it.value) - LW), height: 20, rx: 3, "stroke-width": 1.5 }, fillFor(it.confidence))));
+      svg.append(s("text", { x: x(Math.max(it.value, it.high || 0)) + 8, y: y + 21, "font-size": 13.5, "font-weight": 600, fill: ink, text: money(it.value) + (it.low != null && it.high != null ? `  (${money(it.low)}–${money(it.high)})` : "") }));
+    });
+    const table = h("ul", { class: "items", style: "margin-top:12px" }, list.map((it) => h("li", { style: "display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap" },
+      h("span", {}, h("span", { class: "dot", style: `background:${catColor(it.category)}` }), it.label), confBadge(it))));
+    pane.replaceChildren(svg, table);
+  }
+  kinds.forEach(([k, label], i) => tabs.append(h("button", { class: "tab", role: "tab", type: "button", "aria-selected": i === 0 ? "true" : "false", onclick: (e) => { tabs.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", "false")); e.currentTarget.setAttribute("aria-selected", "true"); drawKind(k); } }, label)));
+  if (kinds.length > 1) out.append(tabs);
+  out.append(pane);
+  if (kinds.length) drawKind(kinds[0][0]);
+
+  // cumulative projection
+  const totalAt = (m, field) => items.reduce((a, it) => {
+    const v = field === "low" ? (it.low != null ? it.low : it.value) : field === "high" ? (it.high != null ? it.high : it.value) : it.value;
+    return a + (it.kind === "one_time" ? v : it.kind === "monthly" ? v * m : it.kind === "yearly" ? v * Math.ceil(m / 12) : 0);
+  }, 0);
+  const proj = h("div", { style: "margin-top:34px" }, h("h3", { text: "What it adds up to" }));
+  const ctl = h("div", { class: "proj-ctl" });
+  const slider = h("input", { type: "range", min: 1, max: 36, value: 12, "aria-label": "Months" });
+  const mLabel = h("span", {}), total = h("span", { class: "proj-total" }), rng = h("span", { style: "color:var(--muted)" });
+  ctl.append(h("label", {}, "After ", mLabel, " ", slider), total, rng);
+  const chartHolder = h("div", { class: "panel scroll-x" });
+  const catBar = h("div", { class: "cat-bar" }), catLeg = h("div", { class: "cat-legend" });
+  function drawProj() {
+    const M = +slider.value;
+    mLabel.textContent = M === 1 ? "1 month" : M + " months";
+    total.textContent = money(totalAt(M, "value"));
+    const lo = totalAt(M, "low"), hi = totalAt(M, "high");
+    rng.textContent = lo !== hi ? `range ${money(lo)} to ${money(hi)}` : "";
+    const W = 900, H = 220, L = 70, R = 20, T = 14, B = 30;
+    const rawMax = Math.max(1, totalAt(36, "high"));
+    const mag = Math.pow(10, Math.floor(Math.log10(rawMax / 4)));
+    const stepV = [1, 2, 2.5, 5, 10].map((f) => f * mag).find((st) => st * 4 >= rawMax);
+    const maxV = stepV * 4;
+    const x = (m) => L + (W - L - R) * (m / 36), y = (v) => T + (H - T - B) * (1 - v / maxV);
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": "Cumulative cost over 36 months" });
+    for (let k = 0; k <= 4; k++) { const v = maxV * k / 4; svg.append(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: css("--rule") })); svg.append(s("text", { x: L - 8, y: y(v) + 4, "font-size": 11, fill: css("--faint"), "text-anchor": "end", text: money(v) })); }
+    [0, 6, 12, 18, 24, 30, 36].forEach((m) => svg.append(s("text", { x: x(m), y: H - 8, "font-size": 11, fill: css("--faint"), "text-anchor": "middle", text: m ? m + " mo" : "Start" })));
+    let band = "", line = "";
+    for (let m = 0; m <= 36; m++) band += (m ? "L" : "M") + x(m) + " " + y(totalAt(m, "high"));
+    for (let m = 36; m >= 0; m--) band += "L" + x(m) + " " + y(totalAt(m, "low"));
+    for (let m = 0; m <= 36; m++) line += (m ? "L" : "M") + x(m) + " " + y(totalAt(m, "value"));
+    svg.append(s("path", { d: band + "Z", fill: css("--ink"), opacity: 0.08 }));
+    svg.append(s("path", { d: line, fill: "none", stroke: css("--ink"), "stroke-width": 2.2 }));
+    svg.append(s("line", { x1: x(M), x2: x(M), y1: T, y2: H - B, stroke: css("--accent"), "stroke-width": 1.5, "stroke-dasharray": "4 3" }));
+    svg.append(s("circle", { cx: x(M), cy: y(totalAt(M, "value")), r: 5, fill: css("--accent") }));
+    chartHolder.replaceChildren(svg);
+    const byCat = {}; items.forEach((it) => { const v = it.kind === "one_time" ? it.value : it.kind === "monthly" ? it.value * M : it.kind === "yearly" ? it.value * Math.ceil(M / 12) : 0; byCat[it.category || "other"] = (byCat[it.category || "other"] || 0) + v; });
+    const tot = Object.values(byCat).reduce((a, b) => a + b, 0) || 1;
+    const cats = Object.keys(byCat).sort((a, b) => byCat[b] - byCat[a]);
+    catBar.replaceChildren(...cats.map((c) => h("span", { style: `width:${100 * byCat[c] / tot}%;background:${catColor(c)}`, title: `${c}: ${money(byCat[c])}` })));
+    catLeg.replaceChildren(...cats.map((c) => h("span", {}, h("span", { class: "dot", style: `background:${catColor(c)}` }), `${c} ${money(byCat[c])}`)));
+  }
+  slider.addEventListener("input", drawProj);
+  proj.append(ctl, catBar, catLeg, h("div", { style: "height:12px" }), chartHolder);
+  drawProj();
+  out.append(proj);
+  out._redraw = () => { const sel = tabs.querySelector('[aria-selected="true"]'); const idx = sel ? [...tabs.children].indexOf(sel) : 0; if (kinds.length) drawKind(kinds[Math.max(0, idx)][0]); drawProj(); };
+  return { lede: C.note || "", node: out };
+};
+
+builders.tech = (T) => {
+  const tech = decisions.filter((d) => d.area === "tech");
+  const order = ["frontend", "mobile", "backend", "ai", "data", "infra", "tooling"];
+  const layers = [...new Set(tech.filter((d) => d.current_state === "accepted").map((d) => d.layer || "other"))].sort((a, b) => (order.indexOf(a) < 0 ? 99 : order.indexOf(a)) - (order.indexOf(b) < 0 ? 99 : order.indexOf(b)));
+  const stack = h("div", { class: "stack" }, layers.map((L) => h("div", { class: "layer" },
+    h("div", { class: "ln", text: L }),
+    h("div", { class: "lc" }, tech.filter((d) => (d.layer || "other") === L && d.current_state === "accepted").map((d) => {
+      const alts = tech.filter((a) => a.superseded_by === d.id || ((a.layer || "other") === L && a.current_state === "rejected"));
+      return [h("button", { class: "tech-chip" + (d.phase === "later" ? " later" : ""), type: "button", onclick: () => openDecision(d.id) }, d.title, d.phase === "later" ? h("small", { text: "later" }) : null),
+        ...alts.map((a) => h("button", { class: "tech-alt", type: "button", onclick: () => openDecision(a.id), title: lastReason(a) }, a.title))];
+    })))));
+  return { lede: (T && T.intro ? T.intro + " " : "") + "Struck-through names are options that were considered and dropped; select any to see why.", node: stack };
+};
+
+builders.skills = (K) => {
+  const items = K.items || [];
+  const gaps = items.filter((i) => i.have === "no").length, part = items.filter((i) => i.have === "partial").length;
+  const rows = h("div", { class: "panel" }, items.slice().sort((a, b) => b.level - a.level).map((k) => h("div", { class: "skill-row" },
+    h("strong", { text: k.name }),
+    h("div", { class: "meter", role: "img", "aria-label": `Level ${k.level} of 5` }, [1, 2, 3, 4, 5].map((n) => h("span", { class: n <= k.level ? "on" : "" }))),
+    h("span", { class: "nf", text: k.needed_for || "" }),
+    k.have ? h("span", { class: "have " + k.have, text: k.have === "yes" ? "Have it" : k.have === "partial" ? "Partly" : "Gap" }) : h("span"))));
+  return { lede: `Bars show the level needed, from basic to expert. ${gaps ? gaps + " gap" + (gaps > 1 ? "s" : "") : "No gaps"}${part ? ", " + part + " partly covered" : ""}.`, node: rows };
+};
+
+builders.team = (T) => {
+  const roles = T.roles || [];
+  const total = roles.reduce((a, r) => a + (r.count || 1), 0);
+  const person = (filled) => { const v = s("svg", { viewBox: "0 0 16 20", width: 16, height: 20, "aria-hidden": "true" }); v.append(s("circle", { cx: 8, cy: 5, r: 4, fill: filled ? css("--ink") : "none", stroke: css("--ink"), "stroke-width": 1.4 }), s("path", { d: "M1 19 C1 12, 15 12, 15 19 Z", fill: filled ? css("--ink") : "none", stroke: css("--ink"), "stroke-width": 1.4 })); return v; };
+  const phases = [["mvp", "For the MVP"], ["later", "After the MVP"]];
+  const grid = h("div", { class: "two" }, phases.map(([p, title]) => {
+    const list = roles.filter((r) => r.phase === p || r.phase === "both" || (!r.phase && p === "mvp"));
+    return h("div", {}, h("h3", { text: title }), list.length ? h("div", { class: "team-grid", style: "grid-template-columns:1fr" }, list.map((r) => h("div", { class: "role" },
+      h("div", { class: "people" }, Array.from({ length: r.count || 1 }, () => person(r.essential !== false))),
+      h("div", {}, h("strong", { text: `${r.role}${(r.count || 1) > 1 ? " ×" + r.count : ""}` }), r.essential === false ? h("span", { class: "why", text: "  optional" }) : null, r.why ? h("div", { class: "why", text: r.why }) : null)))) : h("p", { class: "why", text: "No roles needed." }));
+  }));
+  return { lede: (T.note ? T.note + " " : "") + `${total} ${total === 1 ? "person" : "people"} across all phases. Hollow figures are optional roles.`, node: grid };
+};
+
+builders.risks = (R) => {
+  const items = R.items || [];
+  const list = h("ol", { class: "risk-list" });
+  const S = 300, P = 40, cell = (S - P) / 3;
+  const svg = s("svg", { viewBox: `0 0 ${S + 10} ${S + 30}`, width: "100%", role: "img", "aria-label": "Risk matrix, likelihood by impact" });
+  for (let li = 1; li <= 3; li++) for (let im = 1; im <= 3; im++) {
+    const score = li * im;
+    svg.append(s("rect", { x: P + (li - 1) * cell, y: (3 - im) * cell, width: cell - 3, height: cell - 3, rx: 4, fill: css("--bad"), opacity: 0.06 + score * 0.055 }));
+  }
+  svg.append(s("text", { x: P + (S - P) / 2, y: S + 6, "font-size": 12, "text-anchor": "middle", fill: css("--muted"), text: "Likelihood →" }));
+  svg.append(s("text", { x: 12, y: (S - P) / 2, "font-size": 12, "text-anchor": "middle", fill: css("--muted"), transform: `rotate(-90 12 ${(S - P) / 2})`, text: "Impact →" }));
+  const buckets = {};
+  const marks = [];
+  const sizes = {}; items.forEach((r) => { const key = r.likelihood + "-" + r.impact; sizes[key] = (sizes[key] || 0) + 1; });
+  items.forEach((r, i) => {
+    const key = r.likelihood + "-" + r.impact; const k = buckets[key] = (buckets[key] || 0) + 1;
+    const n = sizes[key], perRow = Math.min(3, n), row = Math.floor((k - 1) / 3), col = (k - 1) % 3;
+    const rowCount = Math.min(3, n - row * 3), rows = Math.ceil(n / 3);
+    const cx = P + (r.likelihood - 1) * cell + cell / 2 + (col - (rowCount - 1) / 2) * 24 - 1.5;
+    const cy = (3 - r.impact) * cell + cell / 2 + (row - (rows - 1) / 2) * 24 - 1.5;
+    const g = s("g", { tabindex: 0, role: "button", "aria-label": `Risk ${i + 1}: ${r.text}`, style: "cursor:pointer" });
+    const closed = r.status === "mitigated" || r.status === "closed";
+    g.append(s("circle", { cx, cy, r: 11, fill: closed ? css("--surface") : css("--ink"), stroke: css("--ink"), "stroke-width": 1.6 }));
+    g.append(s("text", { x: cx, y: cy + 4, "font-size": 11.5, "font-weight": 700, "text-anchor": "middle", fill: closed ? css("--ink") : css("--paper"), text: i + 1 }));
+    const li = h("li", {}, h("span", { class: "n", text: i + 1 }), h("div", {}, h("div", { text: r.text }), r.mitigation ? h("div", { class: "mit", text: "Mitigation: " + r.mitigation }) : null, h("div", { class: "mit" }, `Likelihood ${r.likelihood} of 3, impact ${r.impact} of 3${r.status ? ", " + r.status : ""}`)));
+    const hi = (on) => { li.classList.toggle("hi", on); };
+    g.addEventListener("mouseenter", () => hi(true)); g.addEventListener("mouseleave", () => hi(false));
+    g.addEventListener("focus", () => hi(true)); g.addEventListener("blur", () => hi(false));
+    g.addEventListener("click", () => li.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+    svg.append(g); list.append(li);
+  });
+  return { lede: "Top right is the danger zone. Filled markers are open risks; hollow ones are mitigated or closed.", node: h("div", { class: "risk-wrap" }, h("div", {}, svg), list) };
+};
+
+builders.open_questions = (Q) => {
+  const list = h("div", { class: "panel" }, Q.map((q) => h("div", { class: "q" },
+    h("div", { class: "qt", text: q.text }),
+    q.why_it_matters ? h("div", { class: "wm", text: q.why_it_matters }) : null,
+    (q.blocks || []).length || q.owner ? h("div", { class: "blocks" }, (q.blocks || []).length ? "Waiting on this:" : null,
+      ...(q.blocks || []).filter((id) => decById[id]).map((id) => h("button", { class: "linkish", type: "button", onclick: () => openDecision(id) }, decById[id].title)),
+      q.owner ? h("span", {}, "Owner: " + q.owner) : null) : null)));
+  return { lede: `${Q.length} thing${Q.length === 1 ? "" : "s"} still unresolved. Treat anything below as unknown, not as decided.`, node: list };
+};
+
+builders.sources = (S) => {
+  const dated = S.filter((x) => parseDate(x.started) != null);
+  let strip = null;
+  if (dated.length > 1) {
+    const t0 = Math.min(...dated.map((x) => parseDate(x.started))), t1 = Math.max(...dated.map((x) => parseDate(x.ended || x.started)));
+    const W = 900, RH = 22, H = dated.length * RH + 24, L = 50, RPAD = 150;
+    const x = (t) => L + (W - L - RPAD) * ((t - t0) / Math.max(1, t1 - t0));
+    strip = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": "When each source happened" });
+    dated.forEach((so, i) => {
+      const a = x(parseDate(so.started)), b = x(parseDate(so.ended || so.started));
+      strip.append(s("text", { x: 0, y: i * RH + 13, "font-size": 12, fill: css("--muted"), text: so.id }));
+      strip.append(s("rect", { x: a, y: i * RH + 5, width: Math.max(12, b - a), height: 10, rx: 5, fill: css("--ink"), opacity: 0.75 }, s("title", { text: `${so.tool}: ${so.title}` })));
+      strip.append(s("text", { x: a + Math.max(12, b - a) + 8, y: i * RH + 14, "font-size": 12, fill: css("--muted"), text: so.tool }));
+    });
+    strip.append(s("text", { x: L, y: H - 4, "font-size": 11, fill: css("--faint"), text: fmtShort(t0) }));
+    strip.append(s("text", { x: W - RPAD, y: H - 4, "font-size": 11, fill: css("--faint"), "text-anchor": "end", text: fmtShort(t1) }));
+  }
+  const table = h("table", { class: "src-table" }, h("thead", {}, h("tr", {}, ["", "Tool", "Conversation", "When", "Messages"].map((t) => h("th", { text: t })))),
+    h("tbody", {}, S.map((so) => h("tr", {}, h("td", { text: so.id }), h("td", { text: so.tool }), h("td", { text: so.title }), h("td", { text: [fmtDate(so.started), so.ended && so.ended !== so.started ? fmtDate(so.ended) : null].filter(Boolean).join(" to ") }), h("td", { text: so.messages != null ? so.messages : "" })))));
+  return { lede: "Everything in this dossier traces back to these conversations.", node: h("div", {}, strip ? h("div", { class: "scroll-x", style: "margin-bottom:16px" }, strip) : null, h("div", { class: "scroll-x" }, table)) };
+};
+
+/* ---------- assemble ---------- */
+const meta = D.meta || {};
+document.title = meta.title || (D.summary && D.summary.name) || "Idea dossier";
+document.getElementById("toc-title").textContent = (D.summary && D.summary.name) || meta.title || "Dossier";
+const defaultOrder = ["summary", "journey", "decisions", "features", "plan", "costs", "tech", "skills", "team", "dos_donts", "risks", "validation", "pros_cons", "open_questions", "sources"];
+const order = (meta.section_order && meta.section_order.length ? meta.section_order : defaultOrder).filter((k) => D[k] != null && builders[k]);
+const collapsed = new Set(meta.collapsed || []);
+const toc = document.getElementById("toc");
+const redraws = [];
+order.forEach((key) => {
+  const val = D[key];
+  if (Array.isArray(val) && !val.length) return;
+  let built;
+  try { built = builders[key](val); } catch (err) { console.error(key, err); return; }
+  const id = "s-" + key;
+  const sec = h("section", { class: "sec", id, "aria-labelledby": id + "-h" });
+  if (built.bare) { sec.append(built.node); }
+  else {
+    const head = [h("h2", { id: id + "-h", text: TITLES[key] }), built.lede ? h("p", { class: "sec-lede", text: built.lede }) : null];
+    const headNodes = head.filter(Boolean);
+    if (collapsed.has(key)) sec.append(h("details", { class: "fold" }, h("summary", {}, ...headNodes), built.node));
+    else sec.append(...headNodes, built.node);
+  }
+  if (built.node._redraw) redraws.push(built.node._redraw);
+  main.append(sec);
+  toc.append(h("li", {}, h("a", { href: "#" + id, text: TITLES[key] })));
+});
+main.append(h("footer", { class: "foot" }, `Compiled ${fmtDate(meta.generated)} from a decision ledger${(D.sources || []).length ? " and " + D.sources.length + " source" + (D.sources.length === 1 ? "" : "s") : ""}.${meta.audience ? " Prepared for: " + meta.audience + "." : ""}`));
+
+/* active nav */
+const links = [...toc.querySelectorAll("a")];
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver((ents) => ents.forEach((en) => { if (en.isIntersecting) links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+  main.querySelectorAll("section.sec").forEach((sct) => io.observe(sct));
+}
+
+/* theme toggle: redraw SVGs that read CSS colors */
+const root = document.documentElement;
+try { const saved = localStorage.getItem("dossier-theme"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+document.getElementById("theme-btn").addEventListener("click", () => {
+  const dark = root.getAttribute("data-theme") ? root.getAttribute("data-theme") === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const next = dark ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  try { localStorage.setItem("dossier-theme", next); } catch (e) {}
+  redraws.forEach((f) => f());
+  rebuildStatic();
+});
+function rebuildStatic() {
+  // sections without redraw hooks use colors read at build time; rebuild them in place
+  order.forEach((key) => {
+    const sec = document.getElementById("s-" + key); if (!sec) return;
+    if (["plan", "risks", "sources", "validation", "team"].includes(key)) {
+      const built = builders[key](D[key]);
+      const old = sec.querySelector("details.fold") ? sec.querySelector("details.fold").lastElementChild : sec.lastElementChild;
+      old.replaceWith(built.node);
+    }
+  });
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (!root.getAttribute("data-theme")) { redraws.forEach((f) => f()); rebuildStatic(); } });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{"type": "summary", "summary": "Habitat prototype: group schema"}
+{"type": "user", "timestamp": "2026-09-18T14:00:00Z", "message": {"role": "user", "content": "Set up the prototype. Groups, members, habits, check-ins."}}
+{"type": "assistant", "timestamp": "2026-09-18T14:03:00Z", "message": {"role": "assistant", "content": [{"type": "text", "text": "Group membership is relational (groups, members, shared habits, check-ins). Firestore makes the 'who can see which group' rules awkward. Supabase gives Postgres plus auth and row-level security per group, and the Pro plan is $25/month."}, {"type": "tool_use", "name": "bash", "input": {"cmd": "ls"}}]}}
+{"type": "user", "timestamp": "2026-09-18T14:04:00Z", "message": {"role": "user", "content": [{"type": "tool_result", "content": "src/ package.json"}]}}
+{"type": "user", "timestamp": "2026-09-18T14:20:00Z", "message": {"role": "user", "content": "Switch to Supabase then. Also, can we keep a read-only offline cache so people can at least see today's habits without wifi?"}}
+{"type": "assistant", "timestamp": "2026-09-18T14:22:00Z", "message": {"role": "assistant", "content": [{"type": "text", "text": "Yes: cache the latest group state locally and queue nothing. That covers the wifi complaint for viewing at roughly a week of work."}]}}

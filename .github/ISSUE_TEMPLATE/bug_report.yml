@@ -1,0 +1,54 @@
+name: Bug report
+description: Something doesn't work as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting. Please remove personal data from anything you paste (chats, ledgers, dossiers).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: dropdown
+    id: part
+    attributes:
+      label: Which part?
+      options:
+        - Activation (skill didn't trigger or triggered wrongly)
+        - Capture / ledger
+        - Ingesting exports (normalize_exports.py)
+        - ledger.py
+        - scaffold_dossier.py
+        - build_dossier.py
+        - The HTML dossier (display or interaction)
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and model
+      placeholder: e.g. Claude Code 2.x with Claude Opus, Codex CLI, claude.ai, Gemini CLI
+  - type: input
+    id: env
+    attributes:
+      label: OS, Python version, browser (if relevant)
+      placeholder: e.g. macOS 15, Python 3.12, Firefox 140
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps or commands to reproduce
+      render: shell
+  - type: textarea
+    id: output
+    attributes:
+      label: Error output or screenshots
+  - type: input
+    id: version
+    attributes:
+      label: Skill version
+      description: From metadata.version in SKILL.md
+      placeholder: 0.1.0

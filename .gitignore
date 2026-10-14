@@ -1,0 +1,28 @@
+# Build output
+dist/
+*.skill
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Your private working data: chat exports and normalized transcripts.
+# The ledger itself (.dossier/ledger.jsonl) is safe and useful to commit for team projects;
+# remove the next line if you want to commit it in this repo too.
+.dossier/
+*.export.zip
+conversations.json
+
+# Locally built dossiers (examples/ are kept)
+/dossier.html
+/dossier.json
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

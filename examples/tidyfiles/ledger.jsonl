@@ -1,0 +1,12 @@
+{"type":"iteration","id":"I-001","title":"Initial brainstorm","summary":"A rules-based Downloads sorter","ts":"2026-10-13T10:00","source":"live"}
+{"type":"frame","id":"F-name","field":"name","text":"tidyfiles","ts":"2026-10-13T10:00","source":"live"}
+{"type":"frame","id":"F-one_liner","field":"one_liner","text":"A CLI that sorts your Downloads folder by rules you write in one TOML file.","ts":"2026-10-13T10:00","source":"live"}
+{"type":"frame","id":"F-problem","field":"problem","text":"Downloads fills up with installers, PDFs and screenshots that never get filed.","ts":"2026-10-13T10:00","source":"live"}
+{"type":"decision","id":"D-001","state":"accepted","title":"Rust","area":"tech","layer":"tooling","phase":"mvp","reason":"Fast single binary","ts":"2026-10-13T10:05","source":"live"}
+{"type":"decision","id":"D-002","state":"proposed","title":"Watch mode","area":"feature","ts":"2026-10-13T10:06","source":"live"}
+{"type":"decision","id":"D-003","state":"accepted","title":"Python with Typer","area":"tech","layer":"tooling","phase":"mvp","reason":"Faster to iterate on for a weekend project","ts":"2026-10-13T10:30","source":"live"}
+{"type":"decision","id":"D-001","state":"superseded","title":"Rust","area":"tech","superseded_by":"D-003","reason":"Speed of a binary does not matter for a once-a-day sort","ts":"2026-10-13T10:30","source":"live"}
+{"type":"decision","id":"D-004","state":"accepted","title":"Dry-run by default","area":"feature","phase":"mvp","reason":"Moving files is destructive; show the plan before acting","ts":"2026-10-13T10:32","source":"live"}
+{"type":"guideline","id":"G-001","polarity":"dont","text":"Never delete files, only move them","why":"An undo is impossible after a delete","ts":"2026-10-13T10:33","source":"live"}
+{"type":"decision","id":"D-002","state":"parked","title":"Watch mode","area":"feature","reason":"Running it on demand covers the need for now","ts":"2026-10-13T10:40","source":"live"}
+{"type":"decision","id":"D-005","state":"proposed","title":"Publish to PyPI","area":"ops","ts":"2026-10-13T10:45","source":"live"}

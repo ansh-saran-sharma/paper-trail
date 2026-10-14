@@ -1,0 +1,52 @@
+[
+  {
+    "id": "S1",
+    "tool": "ChatGPT",
+    "title": "habit app idea",
+    "started": "2026-09-02",
+    "ended": "2026-09-03",
+    "messages": 8,
+    "file": "S1.md",
+    "origin": "exports/chatgpt-export.zip!conversations.json"
+  },
+  {
+    "id": "S2",
+    "tool": "Claude",
+    "title": "Habit app: interviews and scope cut",
+    "started": "2026-09-10",
+    "ended": "2026-09-12",
+    "messages": 5,
+    "file": "S2.md",
+    "origin": "exports/claude-conversations.json"
+  },
+  {
+    "id": "S3",
+    "tool": "Claude Code",
+    "title": "Habitat prototype: group schema",
+    "started": "2026-09-18",
+    "ended": "2026-09-18",
+    "messages": 4,
+    "file": "S3.md",
+    "origin": "exports/session-7f3a.jsonl"
+  },
+  {
+    "id": "S4",
+    "tool": "Gemini",
+    "title": "Pricing research for Habitat (Gemini)",
+    "started": null,
+    "ended": null,
+    "messages": 5,
+    "file": "S4.md",
+    "origin": "exports/gemini-pricing.md"
+  },
+  {
+    "id": "S5",
+    "tool": "Notes",
+    "title": "notes",
+    "started": null,
+    "ended": null,
+    "messages": 1,
+    "file": "S5.md",
+    "origin": "exports/notes.txt"
+  }
+]

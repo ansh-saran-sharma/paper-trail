@@ -1,0 +1,31 @@
+name: Support a new export format
+description: An AI tool's chat export isn't recognized, or is read incorrectly
+labels: [export-format]
+body:
+  - type: input
+    id: tool
+    attributes:
+      label: Tool and version
+      placeholder: e.g. Perplexity web, Copilot Chat in VS Code 1.10x
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: How you exported it
+      description: Menu path or file location.
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Small anonymized sample
+      description: A few messages with all personal content replaced. Include one tool call or system message if the format has them.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What normalize_exports.py --list printed
+      render: shell

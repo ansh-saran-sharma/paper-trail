@@ -1,0 +1,928 @@
+{
+  "meta": {
+    "title": "Habitat: idea dossier",
+    "audience": "team",
+    "generated": "2026-10-12",
+    "currency": "USD"
+  },
+  "summary": {
+    "name": "Habitat",
+    "one_liner": "A habit tracker that study groups share, so nobody quits alone.",
+    "stage": "validating",
+    "status": "MVP scoped and prototype schema built; pricing undecided. Upfront costs beyond store fees are still guesses.",
+    "problem": "Students start habit apps and quit within two weeks, mostly because they are doing it alone.",
+    "solution": "Small study groups share habits and check in together in one feed; streaks are kept as a group, not ranked against each other.",
+    "audience": "University students in study groups of 3 to 8, starting with one campus.",
+    "why_now": "Universities are investing in student-success programmes, and group study is already a habit students have.",
+    "highlights": [
+      {
+        "label": "MVP build",
+        "value": 6,
+        "low": 5,
+        "high": 8,
+        "unit": "weeks",
+        "confidence": "estimated",
+        "basis": "Same core screens, no sync layer, one cross-platform codebase (was 10 weeks before the scope cut)"
+      },
+      {
+        "label": "Running cost at launch",
+        "value": 44,
+        "low": 25,
+        "high": 54,
+        "unit": "USD/month",
+        "confidence": "estimated",
+        "basis": "Supabase Pro $25 (verified) plus Expo builds $0–29 (estimated)"
+      },
+      {
+        "label": "Upfront cost",
+        "value": 375,
+        "low": 125,
+        "high": 725,
+        "unit": "USD",
+        "confidence": "assumption",
+        "basis": "Store fees are verified; design and pilot marketing are guesses"
+      },
+      {
+        "label": "Team for MVP",
+        "value": 1,
+        "unit": "person",
+        "confidence": "estimated",
+        "basis": "Scope after the cuts fits one developer"
+      }
+    ]
+  },
+  "journey": [
+    {
+      "id": "I-001",
+      "title": "First concept",
+      "date": "2026-09-02",
+      "summary": "Started as a personal habit tracker for students, with streaks, full offline sync and native apps on Firebase. The first estimate was 10 weeks.",
+      "changes": [
+        {
+          "decision_id": "D-002",
+          "to": "accepted",
+          "text": "Streaks are the core loop"
+        },
+        {
+          "decision_id": "D-003",
+          "to": "accepted",
+          "text": "Offline sync added for patchy campus wifi"
+        },
+        {
+          "decision_id": "D-004",
+          "to": "accepted",
+          "text": "Firebase chosen as the backend"
+        }
+      ]
+    },
+    {
+      "id": "I-002",
+      "title": "Interviews and the group pivot",
+      "date": "2026-09-10",
+      "summary": "Twelve interviews showed people quit because they track alone. Habits became shared within study groups, and the MVP was cut to 6 weeks.",
+      "changes": [
+        {
+          "decision_id": "D-008",
+          "to": "accepted",
+          "text": "Habits are shared by a study group"
+        },
+        {
+          "decision_id": "D-001",
+          "to": "superseded",
+          "text": "The personal tracker was replaced by the group version"
+        },
+        {
+          "decision_id": "D-003",
+          "to": "rejected",
+          "text": "Offline sync dropped: doubles build time, 2 of 12 asked"
+        },
+        {
+          "decision_id": "D-013",
+          "to": "rejected",
+          "text": "Leaderboards dropped: ranking felt stressful"
+        },
+        {
+          "decision_id": "D-007",
+          "to": "accepted",
+          "text": "React Native with Expo instead of two native apps"
+        },
+        {
+          "decision_id": "D-005",
+          "to": "parked",
+          "text": "AI coach parked for later"
+        }
+      ]
+    },
+    {
+      "id": "I-003",
+      "title": "Prototype and stack change",
+      "date": "2026-09-18",
+      "summary": "Modelling groups showed Firestore was a poor fit, so the backend moved to Supabase. A small part of offline came back as a read-only cache.",
+      "changes": [
+        {
+          "decision_id": "D-010",
+          "to": "accepted",
+          "text": "Supabase replaces Firebase"
+        },
+        {
+          "decision_id": "D-004",
+          "to": "superseded",
+          "text": "Firebase retired: per-group rules were awkward"
+        },
+        {
+          "decision_id": "D-011",
+          "to": "accepted",
+          "text": "Read-only offline cache, about a week of work"
+        }
+      ]
+    },
+    {
+      "id": "I-004",
+      "title": "Business model research",
+      "date": "2026-09-25",
+      "summary": "Compared freemium with a campus licence and scanned competitors. Pricing is still open and depends on a conversation with a student-success office.",
+      "changes": [
+        {
+          "decision_id": "D-012",
+          "to": "proposed",
+          "text": "Pricing: freemium or campus licence, undecided"
+        }
+      ]
+    },
+    {
+      "id": "I-005",
+      "title": "Launch planning",
+      "date": "2026-10-05",
+      "summary": "Set a one-campus launch, a four-phase plan, costs, risks and the team needed.",
+      "changes": [
+        {
+          "decision_id": "D-015",
+          "to": "accepted",
+          "text": "Launch on one campus first"
+        },
+        {
+          "decision_id": "D-016",
+          "to": "accepted",
+          "text": "Solo founder builds the MVP"
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-001",
+      "title": "Personal habit tracker for students",
+      "area": "scope",
+      "current_state": "superseded",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": "D-008",
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-02",
+          "reason": "Starting point: simple daily check-in loop",
+          "source": "S1#m1",
+          "iteration": "I-001"
+        },
+        {
+          "state": "superseded",
+          "date": "2026-09-10",
+          "reason": "Pivot to groups after interviews",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-002",
+      "title": "Streaks",
+      "area": "feature",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-02",
+          "reason": "Core motivation loop; agreed immediately",
+          "source": "S1#m3",
+          "iteration": "I-001"
+        }
+      ]
+    },
+    {
+      "id": "D-003",
+      "title": "Offline sync",
+      "area": "feature",
+      "current_state": "rejected",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": "Full two-way sync of habits and check-ins",
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-09-02",
+          "reason": null,
+          "source": "S1#m2",
+          "iteration": "I-001"
+        },
+        {
+          "state": "accepted",
+          "date": "2026-09-02",
+          "reason": "Campus wifi is unreliable",
+          "source": "S1#m3",
+          "iteration": "I-001"
+        },
+        {
+          "state": "rejected",
+          "date": "2026-09-10",
+          "reason": "Roughly doubles build time; only 2 of 12 interviewees asked for it",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-005",
+      "title": "AI habit coach",
+      "area": "feature",
+      "current_state": "parked",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": "Nudges based on missed days",
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-09-02",
+          "reason": null,
+          "source": "S1#m2",
+          "iteration": "I-001"
+        },
+        {
+          "state": "parked",
+          "date": "2026-09-10",
+          "reason": "Nice to have; not needed to test the group idea",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-004",
+      "title": "Firebase",
+      "area": "tech",
+      "current_state": "superseded",
+      "phase": "mvp",
+      "layer": "backend",
+      "superseded_by": "D-010",
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-02",
+          "reason": "Auth, database and offline persistence out of the box",
+          "source": "S1#m5",
+          "iteration": "I-001"
+        },
+        {
+          "state": "superseded",
+          "date": "2026-09-18",
+          "reason": "Firestore made per-group visibility rules awkward",
+          "source": "S3#m3",
+          "iteration": "I-003"
+        }
+      ]
+    },
+    {
+      "id": "D-006",
+      "title": "Native iOS and Android apps",
+      "area": "tech",
+      "current_state": "rejected",
+      "phase": null,
+      "layer": "mobile",
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-09-02",
+          "reason": "Preferred for the native feel",
+          "source": "S1#m5",
+          "iteration": "I-001"
+        },
+        {
+          "state": "rejected",
+          "date": "2026-09-12",
+          "reason": "Two codebases is too much for one developer",
+          "source": "S2#m5",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-013",
+      "title": "Leaderboards",
+      "area": "feature",
+      "current_state": "rejected",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-09-03",
+          "reason": null,
+          "source": "S1#m7",
+          "iteration": "I-001"
+        },
+        {
+          "state": "rejected",
+          "date": "2026-09-10",
+          "reason": "Interviewees found ranking stressful, which works against a supportive group",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-008",
+      "title": "Shared study-group habits",
+      "area": "scope",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-10",
+          "reason": "Interviews: people quit because they track alone; groups check in together",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-009",
+      "title": "Group check-in feed",
+      "area": "feature",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-10",
+          "reason": "The visible 'everyone checked in today' moment is the core of the group idea",
+          "source": "S2#m3",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-007",
+      "title": "React Native with Expo",
+      "area": "tech",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": "mobile",
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-12",
+          "reason": "One codebase for both platforms and fast iteration",
+          "source": "S2#m5",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-014",
+      "title": "Web dashboard for group admins",
+      "area": "feature",
+      "current_state": "parked",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "parked",
+          "date": "2026-09-12",
+          "reason": "Useful for organisers, not needed to validate",
+          "source": "S2#m5",
+          "iteration": "I-002"
+        }
+      ]
+    },
+    {
+      "id": "D-010",
+      "title": "Supabase (Postgres and auth)",
+      "area": "tech",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": "backend",
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-18",
+          "reason": "Group membership is relational; row-level security handles who sees which group",
+          "source": "S3#m3",
+          "iteration": "I-003"
+        }
+      ]
+    },
+    {
+      "id": "D-011",
+      "title": "Read-only offline cache",
+      "area": "feature",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": "D-003",
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-09-18",
+          "reason": "Covers the wifi complaint for viewing at about a week of work, without full sync",
+          "source": "S3#m4",
+          "iteration": "I-003"
+        }
+      ]
+    },
+    {
+      "id": "D-012",
+      "title": "Pricing model",
+      "area": "pricing",
+      "current_state": "proposed",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": "Freemium with paid larger groups, or a campus licence sold to student-success offices",
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-09-25",
+          "reason": null,
+          "source": "S4#m2",
+          "iteration": "I-004"
+        }
+      ]
+    },
+    {
+      "id": "D-015",
+      "title": "Launch on one campus first",
+      "area": "business",
+      "current_state": "accepted",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-10-05",
+          "reason": "Groups only work if friends are on it; density on one campus beats thin spread",
+          "source": "live",
+          "iteration": "I-005"
+        }
+      ]
+    },
+    {
+      "id": "D-016",
+      "title": "Solo founder for the MVP",
+      "area": "team",
+      "current_state": "accepted",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-10-05",
+          "reason": "Scope fits one person after the cuts",
+          "source": "live",
+          "iteration": "I-005"
+        }
+      ]
+    },
+    {
+      "id": "D-017",
+      "title": "Part-time designer after the pilot",
+      "area": "team",
+      "current_state": "parked",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "parked",
+          "date": "2026-10-05",
+          "reason": "Only if pilot feedback is about usability",
+          "source": "live",
+          "iteration": "I-005"
+        }
+      ]
+    }
+  ],
+  "features": {
+    "intro": "Four things make the MVP. Everything else was deliberately deferred or cut; select a card to see why."
+  },
+  "validation": {
+    "verdict": "The core insight (people quit when they track alone) has moderate support from 12 interviews. Nobody has paid yet, and one competitor already offers groups.",
+    "evidence": [
+      {
+        "id": "V-001",
+        "claim": "7 of 9 interviewees who had used habit apps quit within 2 weeks, mostly because they were doing it alone",
+        "supports": "for",
+        "strength": "moderate",
+        "source_ref": "Founder interviews, Sept 2026 (12 students)",
+        "date": "2026-09-10"
+      },
+      {
+        "id": "V-002",
+        "claim": "Only 2 of 12 interviewees asked about offline use",
+        "supports": "for",
+        "strength": "weak",
+        "source_ref": "Founder interviews, Sept 2026",
+        "date": "2026-09-10"
+      },
+      {
+        "id": "V-003",
+        "claim": "Most interviewees said leaderboards feel stressful",
+        "supports": "for",
+        "strength": "moderate",
+        "source_ref": "Founder interviews, Sept 2026",
+        "date": "2026-09-10"
+      },
+      {
+        "id": "V-004",
+        "claim": "Habitica already has group 'parties', though it is game-styled and not focused on study groups",
+        "supports": "against",
+        "strength": "moderate",
+        "source_ref": "Competitor scan (Gemini chat, S4)",
+        "date": "2026-09-25"
+      },
+      {
+        "id": "V-005",
+        "claim": "Most mainstream habit apps are single-player",
+        "supports": "for",
+        "strength": "weak",
+        "source_ref": "Competitor scan (Gemini chat, S4), not independently checked",
+        "date": "2026-09-25"
+      }
+    ]
+  },
+  "dos_donts": {
+    "do": [
+      {
+        "text": "Launch to one campus before spreading",
+        "why": "Groups need friends on the app; density matters more than reach"
+      },
+      {
+        "text": "Measure week-2 retention above everything else",
+        "why": "Quitting in week 2 is the exact problem the product claims to solve"
+      }
+    ],
+    "dont": [
+      {
+        "text": "Don't add competitive mechanics",
+        "why": "Interviewees found leaderboards stressful; the product is about support, not ranking"
+      },
+      {
+        "text": "Don't build sync or a backend of your own",
+        "why": "That's what blew the first estimate up to 10 weeks"
+      }
+    ]
+  },
+  "plan": {
+    "start_date": "2026-11-02",
+    "milestones": [
+      {
+        "id": "M-001",
+        "name": "MVP build",
+        "goal": "Groups, shared habits, check-in feed, streaks, offline cache",
+        "start_week": 0,
+        "duration_weeks": 6,
+        "deliverables": [
+          "iOS and Android test builds",
+          "Group invite links",
+          "Check-in feed"
+        ],
+        "confidence": "estimated",
+        "depends_on": [],
+        "basis": "E-001: 5 to 8 weeks, solo",
+        "is_mvp": true
+      },
+      {
+        "id": "M-002",
+        "name": "Campus pilot",
+        "goal": "20 groups on one campus for 4 weeks",
+        "start_week": 6,
+        "duration_weeks": 4,
+        "deliverables": [
+          "Pilot with student-success office",
+          "Weekly retention numbers"
+        ],
+        "confidence": "assumption",
+        "depends_on": [
+          "M-001"
+        ],
+        "is_mvp": false,
+        "basis": "Placeholder until pilot dates are agreed"
+      },
+      {
+        "id": "M-003",
+        "name": "Fix and decide pricing",
+        "goal": "Act on pilot data and settle the pricing model",
+        "start_week": 10,
+        "duration_weeks": 3,
+        "deliverables": [
+          "Pricing decision",
+          "Top 5 fixes"
+        ],
+        "confidence": "assumption",
+        "depends_on": [
+          "M-002"
+        ],
+        "is_mvp": false,
+        "basis": "Placeholder until pilot dates are agreed"
+      },
+      {
+        "id": "M-004",
+        "name": "Public launch v1",
+        "goal": "App store release on the pilot campus plus one more",
+        "start_week": 13,
+        "duration_weeks": 5,
+        "deliverables": [
+          "Store listings",
+          "Admin web dashboard if pilot demands it"
+        ],
+        "confidence": "assumption",
+        "depends_on": [
+          "M-003"
+        ],
+        "is_mvp": false,
+        "basis": "Placeholder until pilot dates are agreed"
+      }
+    ]
+  },
+  "costs": {
+    "currency": "USD",
+    "note": "Excludes the founder's own time. Store fees and hosting are checked; the rest are estimates or guesses.",
+    "items": [
+      {
+        "id": "E-002",
+        "label": "Supabase Pro hosting",
+        "category": "infra",
+        "kind": "monthly",
+        "value": 25,
+        "confidence": "verified",
+        "source_ref": "supabase.com/pricing, checked 2026-09-18"
+      },
+      {
+        "id": "E-005",
+        "label": "Expo build service",
+        "category": "tools",
+        "kind": "monthly",
+        "value": 19,
+        "confidence": "estimated",
+        "low": 0,
+        "high": 29,
+        "basis": "Free tier may suffice for a pilot; paid tier if build queue becomes a bottleneck"
+      },
+      {
+        "id": "E-003",
+        "label": "Apple Developer Program",
+        "category": "tools",
+        "kind": "yearly",
+        "value": 99,
+        "confidence": "verified",
+        "source_ref": "developer.apple.com/programs"
+      },
+      {
+        "id": "E-004",
+        "label": "Google Play developer account",
+        "category": "tools",
+        "kind": "one_time",
+        "value": 25,
+        "confidence": "verified",
+        "source_ref": "Google Play Console registration fee"
+      },
+      {
+        "id": "E-006",
+        "label": "Design assets and icon",
+        "category": "other",
+        "kind": "one_time",
+        "value": 200,
+        "confidence": "assumption",
+        "low": 0,
+        "high": 400
+      },
+      {
+        "id": "E-007",
+        "label": "Campus pilot marketing",
+        "category": "marketing",
+        "kind": "one_time",
+        "value": 150,
+        "confidence": "assumption",
+        "low": 100,
+        "high": 300
+      }
+    ]
+  },
+  "tech": {
+    "intro": "Chosen so one person can build and run it."
+  },
+  "skills": {
+    "items": [
+      {
+        "name": "React Native and Expo",
+        "level": 3,
+        "needed_for": "The mobile app",
+        "have": "partial"
+      },
+      {
+        "name": "Postgres and row-level security",
+        "level": 3,
+        "needed_for": "Group permissions",
+        "have": "no"
+      },
+      {
+        "name": "Product design",
+        "level": 2,
+        "needed_for": "Check-in feed and onboarding",
+        "have": "partial"
+      },
+      {
+        "name": "Campus partnerships",
+        "level": 2,
+        "needed_for": "Running the pilot",
+        "have": "yes"
+      }
+    ]
+  },
+  "team": {
+    "note": "A solo build is realistic for the MVP.",
+    "roles": [
+      {
+        "role": "Founder and full-stack developer",
+        "count": 1,
+        "phase": "both",
+        "essential": true,
+        "why": "Scope fits one person after the cuts"
+      },
+      {
+        "role": "Product designer, part-time",
+        "count": 1,
+        "phase": "later",
+        "essential": false,
+        "why": "Only if pilot feedback is about usability"
+      }
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "id": "R-001",
+        "text": "Campus licence sales cycles are long",
+        "likelihood": 3,
+        "impact": 2,
+        "mitigation": "Start with a free campus pilot; don't depend on licence revenue in year one",
+        "status": "open"
+      },
+      {
+        "id": "R-002",
+        "text": "Groups go quiet after the first week",
+        "likelihood": 2,
+        "impact": 3,
+        "mitigation": "Daily group nudge when half the group has checked in; measure week-2 retention in the pilot",
+        "status": "open"
+      },
+      {
+        "id": "R-003",
+        "text": "A solo developer becomes a bottleneck",
+        "likelihood": 2,
+        "impact": 2,
+        "mitigation": "Keep the MVP to five features; no custom backend code beyond Supabase",
+        "status": "accepted"
+      },
+      {
+        "id": "R-004",
+        "text": "Student data privacy rules on campus",
+        "likelihood": 1,
+        "impact": 3,
+        "mitigation": "Store minimal data; check the university's data agreement before the pilot",
+        "status": "open"
+      }
+    ]
+  },
+  "open_questions": [
+    {
+      "id": "Q-002",
+      "text": "Will students pay, or does this need a campus licence?",
+      "why_it_matters": "Decides the pricing model and whether there is revenue in year one",
+      "blocks": [
+        "D-012"
+      ],
+      "owner": "Founder, via a student-success office"
+    },
+    {
+      "id": "Q-003",
+      "text": "Does the university's data agreement allow a pilot with student accounts?",
+      "why_it_matters": "The pilot can't start without it",
+      "blocks": [],
+      "owner": "Founder"
+    },
+    {
+      "id": "Q-gap-1",
+      "text": "Pilot and launch timings are guesses",
+      "why_it_matters": "Only the MVP duration has a worked estimate; confirm pilot dates with the campus before sharing the plan externally",
+      "blocks": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "tool": "ChatGPT",
+      "title": "habit app idea",
+      "started": "2026-09-02",
+      "ended": "2026-09-03",
+      "messages": 8,
+      "file": "S1.md",
+      "origin": "exports/chatgpt-export.zip!conversations.json"
+    },
+    {
+      "id": "S2",
+      "tool": "Claude",
+      "title": "Habit app: interviews and scope cut",
+      "started": "2026-09-10",
+      "ended": "2026-09-12",
+      "messages": 5,
+      "file": "S2.md",
+      "origin": "exports/claude-conversations.json"
+    },
+    {
+      "id": "S3",
+      "tool": "Claude Code",
+      "title": "Habitat prototype: group schema",
+      "started": "2026-09-18",
+      "ended": "2026-09-18",
+      "messages": 4,
+      "file": "S3.md",
+      "origin": "exports/session-7f3a.jsonl"
+    },
+    {
+      "id": "S4",
+      "tool": "Gemini",
+      "title": "Pricing research for Habitat (Gemini)",
+      "started": "2026-09-25",
+      "ended": "2026-09-25",
+      "messages": 5,
+      "file": "S4.md",
+      "origin": "exports/gemini-pricing.md"
+    },
+    {
+      "id": "live",
+      "tool": "Claude",
+      "title": "Launch planning (this conversation)",
+      "started": "2026-10-05",
+      "ended": "2026-10-12",
+      "messages": null
+    }
+  ]
+}

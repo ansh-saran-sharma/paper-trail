@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "tidyfiles: idea dossier",
+    "audience": "personal",
+    "generated": "2026-10-13",
+    "currency": "USD"
+  },
+  "summary": {
+    "name": "tidyfiles",
+    "one_liner": "A CLI that sorts your Downloads folder by rules you write in one TOML file.",
+    "stage": "idea",
+    "status": "Language and core behaviour chosen; nothing built yet.",
+    "problem": "Downloads fills up with installers, PDFs and screenshots that never get filed.",
+    "highlights": []
+  },
+  "decisions": [
+    {
+      "id": "D-001",
+      "title": "Rust",
+      "area": "tech",
+      "current_state": "superseded",
+      "phase": "mvp",
+      "layer": "tooling",
+      "superseded_by": "D-003",
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-10-13",
+          "reason": "Fast single binary",
+          "source": "live",
+          "iteration": "I-001"
+        },
+        {
+          "state": "superseded",
+          "date": "2026-10-13",
+          "reason": "Speed of a binary does not matter for a once-a-day sort",
+          "source": "live",
+          "iteration": "I-001"
+        }
+      ]
+    },
+    {
+      "id": "D-002",
+      "title": "Watch mode",
+      "area": "feature",
+      "current_state": "parked",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-10-13",
+          "reason": null,
+          "source": "live",
+          "iteration": "I-001"
+        },
+        {
+          "state": "parked",
+          "date": "2026-10-13",
+          "reason": "Running it on demand covers the need for now",
+          "source": "live",
+          "iteration": "I-001"
+        }
+      ]
+    },
+    {
+      "id": "D-003",
+      "title": "Python with Typer",
+      "area": "tech",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": "tooling",
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-10-13",
+          "reason": "Faster to iterate on for a weekend project",
+          "source": "live",
+          "iteration": "I-001"
+        }
+      ]
+    },
+    {
+      "id": "D-004",
+      "title": "Dry-run by default",
+      "area": "feature",
+      "current_state": "accepted",
+      "phase": "mvp",
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "accepted",
+          "date": "2026-10-13",
+          "reason": "Moving files is destructive; show the plan before acting",
+          "source": "live",
+          "iteration": "I-001"
+        }
+      ]
+    },
+    {
+      "id": "D-005",
+      "title": "Publish to PyPI",
+      "area": "ops",
+      "current_state": "proposed",
+      "phase": null,
+      "layer": null,
+      "superseded_by": null,
+      "revives": null,
+      "details": null,
+      "history": [
+        {
+          "state": "proposed",
+          "date": "2026-10-13",
+          "reason": null,
+          "source": "live",
+          "iteration": "I-001"
+        }
+      ]
+    }
+  ],
+  "journey": [
+    {
+      "id": "I-001",
+      "title": "Initial brainstorm",
+      "date": "2026-10-13",
+      "summary": "Started in Rust, switched to Python once it was clear speed didn't matter for a daily sort, and made dry-run the default.",
+      "changes": [
+        {
+          "decision_id": "D-001",
+          "to": "accepted",
+          "text": "Rust: Fast single binary"
+        },
+        {
+          "decision_id": "D-001",
+          "to": "superseded",
+          "text": "Rust: Speed of a binary does not matter for a once-a-day sort"
+        },
+        {
+          "decision_id": "D-002",
+          "to": "proposed",
+          "text": "Watch mode"
+        },
+        {
+          "decision_id": "D-002",
+          "to": "parked",
+          "text": "Watch mode: Running it on demand covers the need for now"
+        },
+        {
+          "decision_id": "D-003",
+          "to": "accepted",
+          "text": "Python with Typer: Faster to iterate on for a weekend project"
+        },
+        {
+          "decision_id": "D-004",
+          "to": "accepted",
+          "text": "Dry-run by default: Moving files is destructive; show the plan before acting"
+        },
+        {
+          "decision_id": "D-005",
+          "to": "proposed",
+          "text": "Publish to PyPI"
+        }
+      ]
+    }
+  ],
+  "features": {
+    "intro": "The MVP is a safe, run-on-demand sorter."
+  },
+  "tech": {
+    "intro": "Chosen for speed of iteration, not runtime speed."
+  },
+  "dos_donts": {
+    "do": [],
+    "dont": [
+      {
+        "text": "Never delete files, only move them",
+        "why": "An undo is impossible after a delete"
+      }
+    ]
+  },
+  "open_questions": [
+    {
+      "id": "Q-D-005",
+      "text": "Undecided: Publish to PyPI",
+      "why_it_matters": "Decides whether others can install it with one command",
+      "blocks": [
+        "D-005"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "live",
+      "tool": "Claude Code",
+      "title": "Brainstorm session",
+      "started": "2026-10-13",
+      "ended": "2026-10-13",
+      "messages": null
+    }
+  ]
+}
